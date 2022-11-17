@@ -13,6 +13,9 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
+import PersonIcon from '@mui/icons-material/Person';
+import GroupIcon from '@mui/icons-material/Group';
+import HomeIcon from '@mui/icons-material/Home';
 
 export default function AppBanner() {
     const { auth } = useContext(AuthContext);
@@ -109,9 +112,20 @@ export default function AppBanner() {
                         <Link style={{ textDecoration: 'none', color: 'white' }} to='/'
                             onClick={handleHomeButton}
                         >
-                            ⌂
+                            <HomeIcon/>
                         </Link>
+                        <Link style={{ textDecoration: 'none', color: 'white' }} to='/'
+                            onClick={handleHomeButton}
+                        >
+                            <PersonIcon/>
+                        </Link>
+                        <Link style={{ textDecoration: 'none', color: 'white' }} to='/'
+                            onClick={handleHomeButton}
+                        >
+                            <GroupIcon/>
+                        </Link>  
                     </Typography>
+                    <img src="/playlister.png" alt="image" width="100" height="auto"/>
                     <Box sx={{ flexGrow: 1 }}>{editToolbar}</Box>
                     <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
                         <IconButton
