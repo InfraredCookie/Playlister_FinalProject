@@ -16,6 +16,9 @@ import Typography from '@mui/material/Typography';
 import PersonIcon from '@mui/icons-material/Person';
 import GroupIcon from '@mui/icons-material/Group';
 import HomeIcon from '@mui/icons-material/Home';
+import TextField from '@mui/material/TextField';
+import SearchIcon from '@mui/icons-material/Search';
+import InputAdornment from '@mui/material/InputAdornment';
 
 export default function AppBanner() {
     const { auth } = useContext(AuthContext);
@@ -99,33 +102,52 @@ export default function AppBanner() {
             return <AccountCircle />;
     }
 
+    function getIcons(loggedIn) {
+        if (loggedIn) 
+            return (
+                <div>
+                    <Link style={{ textDecoration: 'none', color: 'white' }} to='/'
+                        onClick={handleHomeButton}
+                    >
+                        <HomeIcon/>
+                    </Link>
+                    <Link style={{ textDecoration: 'none', color: 'white' }} to='/'
+                        onClick={handleHomeButton}
+                    >
+                        <PersonIcon/>
+                    </Link>
+                    <Link style={{ textDecoration: 'none', color: 'white' }} to='/'
+                        onClick={handleHomeButton}
+                    >
+                        <GroupIcon/>
+                    </Link>  
+                    <img src="/playlister.png" alt="image" width="100" height="auto"/>
+                    <TextField 
+                        id="standard-basic" 
+                        InputProps={{
+                            startAdornment: (
+                                <InputAdornment position="start">
+                                    <SearchIcon/>
+                                </InputAdornment>
+                            ),
+                        }} 
+                        variant="standard" 
+                    />
+                </div>
+            );
+        else
+            return (
+                <div>
+                    <img src="/playlister.png" alt="image" width="100" height="auto"/>
+                </div>
+            );
+    }
+
     return (
         <Box sx={{ flexGrow: 1 }}>
             <AppBar position="static">
                 <Toolbar>
-                    <Typography                        
-                        variant="h4"
-                        noWrap
-                        component="div"
-                        sx={{ display: { xs: 'none', sm: 'block' } }}                        
-                    >
-                        <Link style={{ textDecoration: 'none', color: 'white' }} to='/'
-                            onClick={handleHomeButton}
-                        >
-                            <HomeIcon/>
-                        </Link>
-                        <Link style={{ textDecoration: 'none', color: 'white' }} to='/'
-                            onClick={handleHomeButton}
-                        >
-                            <PersonIcon/>
-                        </Link>
-                        <Link style={{ textDecoration: 'none', color: 'white' }} to='/'
-                            onClick={handleHomeButton}
-                        >
-                            <GroupIcon/>
-                        </Link>  
-                    </Typography>
-                    <img src="/playlister.png" alt="image" width="100" height="auto"/>
+                    {getIcons(auth.loggedIn)}
                     <Box sx={{ flexGrow: 1 }}>{editToolbar}</Box>
                     <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
                         <IconButton
