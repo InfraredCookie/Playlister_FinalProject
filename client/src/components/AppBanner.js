@@ -19,12 +19,15 @@ import HomeIcon from '@mui/icons-material/Home';
 import TextField from '@mui/material/TextField';
 import SearchIcon from '@mui/icons-material/Search';
 import InputAdornment from '@mui/material/InputAdornment';
+import MenuIcon from '@mui/icons-material/Menu';
 
 export default function AppBanner() {
     const { auth } = useContext(AuthContext);
     const { store } = useContext(GlobalStoreContext);
     const [anchorEl, setAnchorEl] = useState(null);
+    const [anchorEl2, setAnchorEl2] = useState(null);
     const isMenuOpen = Boolean(anchorEl);
+    const isMenuOpen2 = Boolean(anchorEl2);
 
     const handleProfileMenuOpen = (event) => {
         setAnchorEl(event.currentTarget);
@@ -33,6 +36,19 @@ export default function AppBanner() {
     const handleMenuClose = () => {
         setAnchorEl(null);
     };
+
+    const handleSortMenuOpen = (event) => {
+        setAnchorEl2(event.currentTarget);
+    };
+
+    const handleSortMenuClose = () => {
+        setAnchorEl2(null);
+    };
+
+    const handleSortName = () => {
+        store.sortByName();
+        handleSortMenuClose();
+    }
 
     const handleLogout = () => {
         handleMenuClose();
@@ -45,6 +61,7 @@ export default function AppBanner() {
     }
 
     const menuId = 'primary-search-account-menu';
+    const menuId2 = 'a'
     const loggedOutMenu = (
         <Menu
             anchorEl={anchorEl}
@@ -83,6 +100,29 @@ export default function AppBanner() {
         >
             <MenuItem onClick={handleLogout}>Logout</MenuItem>
         </Menu>        
+
+    const sortMenu =
+        <Menu
+            anchorEl={anchorEl2}
+            anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+            }}
+            id={menuId2}
+            keepMounted
+            transformOrigin={{
+                vertical: 'top',
+                horizontal: 'right',    
+            }}
+            open={isMenuOpen2}
+            onClose={handleSortMenuClose}
+        >
+            <MenuItem onClick={handleSortName}>Name (A-Z)</MenuItem>
+            <MenuItem onClick={store.sortByDate}>Publish Date (Newest)</MenuItem>
+            <MenuItem onClick={handleLogout}>Listens (High-Low)</MenuItem>
+            <MenuItem onClick={handleLogout}>Likes (High-Low)</MenuItem>
+            <MenuItem onClick={handleLogout}>Dislikes (High-Low)</MenuItem>
+        </Menu>
 
     let editToolbar = "";
     let menu = loggedOutMenu;
@@ -138,9 +178,30 @@ export default function AppBanner() {
         else
             return (
                 <div>
-                    <img src="/playlister.png" alt="image" width="100" height="auto"/>
+                    <a href="/"><img src="/playlister.png" alt="image" width="100" height="auto"/></a>
                 </div>
             );
+    }
+
+    function getSort(loggedIn) {
+        if (loggedIn) 
+            return (
+                <div>
+                    <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+                        <IconButton
+                            size="large"
+                            edge="end"
+                            aria-label="account of current user"
+                            aria-controls={menuId2}
+                            aria-haspopup="true"
+                            onClick={handleSortMenuOpen}
+                            color="inherit"
+                        >
+                            <MenuIcon/>
+                        </IconButton>
+                    </Box>
+                </div>
+            )
     }
 
     return (
@@ -149,6 +210,7 @@ export default function AppBanner() {
                 <Toolbar>
                     {getIcons(auth.loggedIn)}
                     <Box sx={{ flexGrow: 1 }}>{editToolbar}</Box>
+                    {getSort(auth.loggedIn)}
                     <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
                         <IconButton
                             size="large"
@@ -166,6 +228,9 @@ export default function AppBanner() {
             </AppBar>
             {
                 menu
+            }
+            {
+                sortMenu
             }
         </Box>
     );

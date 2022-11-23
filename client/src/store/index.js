@@ -30,7 +30,8 @@ export const GlobalStoreActionType = {
     SET_LIST_NAME_EDIT_ACTIVE: "SET_LIST_NAME_EDIT_ACTIVE",
     EDIT_SONG: "EDIT_SONG",
     REMOVE_SONG: "REMOVE_SONG",
-    HIDE_MODALS: "HIDE_MODALS"
+    HIDE_MODALS: "HIDE_MODALS",
+    UPDATE_ID_NAME_PAIRS: "UPDATE_ID_NAME_PAIRS"
 }
 
 // WE'LL NEED THIS TO PROCESS TRANSACTIONS
@@ -203,6 +204,19 @@ function GlobalStoreContextProvider(props) {
                     currentList: store.currentList,
                     currentSongIndex: -1,
                     currentSong: null,
+                    newListCounter: store.newListCounter,
+                    listNameActive: false,
+                    listIdMarkedForDeletion: null,
+                    listMarkedForDeletion: null
+                });
+            }
+            case GlobalStoreActionType.UPDATE_ID_NAME_PAIRS: {
+                return setStore({
+                    currentModal : store.currentModal,
+                    idNamePairs: payload,
+                    currentList: store.currentList,
+                    currentSongIndex: store.currentSongIndex,
+                    currentSong: store.currentSong,
                     newListCounter: store.newListCounter,
                     listNameActive: false,
                     listIdMarkedForDeletion: null,
@@ -547,6 +561,22 @@ function GlobalStoreContextProvider(props) {
     }
 
     document.onkeydown = store.handleKeyPress;
+
+    //Final project functions
+    
+    store.sortByName = function() {
+        let pairs = store.idNamePairs
+        pairs.sort((a, b) => a.name.localeCompare(b.name))
+        console.log(pairs)
+        storeReducer({
+            type: GlobalStoreActionType.UPDATE_ID_NAME_PAIRS,
+            payload: pairs
+        });
+    }
+
+    store.sortByDate = function() {
+        
+    }
 
     return (
         <GlobalStoreContext.Provider value={{
