@@ -315,6 +315,24 @@ function GlobalStoreContextProvider(props) {
         asyncLoadIdNamePairs();
     }
 
+    // THIS FUNCTION LOADS PUBLISHED ID, NAME PAIRS SO WE CAN LIST PUBLISHED LISTS
+    store.loadPublishedIdNamePairs = function () {
+        async function asyncLoadPublishedIdNamePairs() {
+            const response = await api.getPublishedPlaylistPairs();
+            if (response.data.success) {
+                let pairsArray = response.data.idNamePairs;
+                storeReducer({
+                    type: GlobalStoreActionType.LOAD_ID_NAME_PAIRS,
+                    payload: pairsArray
+                });
+            }
+            else {
+                console.log("API FAILED TO GET THE LIST PAIRS");
+            }
+        }
+        asyncLoadPublishedIdNamePairs();
+    }
+
     // THE FOLLOWING 5 FUNCTIONS ARE FOR COORDINATING THE DELETION
     // OF A LIST, WHICH INCLUDES USING A VERIFICATION MODAL. THE
     // FUNCTIONS ARE markListForDeletion, deleteList, deleteMarkedList,
@@ -575,7 +593,31 @@ function GlobalStoreContextProvider(props) {
     }
 
     store.sortByDate = function() {
-        
+        async function asyncSortByDate() {
+            let pairs = store.idNamePairs
+            let playlists = [];
+            for (let key in pairs) {
+                let id = pairs[key]._id;
+                let response = await api.getPlaylistById(id)
+                playlists.push(response.data.playlist)
+            }
+            console.log(playlists)
+            playlists.sort((a, b) => a.createdAt.toString().localeCompare(b.createdAt.toString()))
+            console.log(playlists)
+            let idNamePairs = []
+            for (let key in playlists) {
+                let pair = {
+                    _id: playlists[key]._id,
+                    name: playlists[key].name
+                };
+                idNamePairs.push(pair)
+            }
+            storeReducer({
+                type: GlobalStoreActionType.UPDATE_ID_NAME_PAIRS,
+                payload: idNamePairs
+            });
+        }
+        asyncSortByDate()
     }
 
     return (

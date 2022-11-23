@@ -50,6 +50,11 @@ export default function AppBanner() {
         handleSortMenuClose();
     }
 
+    const handleSortDate = () => {
+        store.sortByDate();
+        handleSortMenuClose();
+    }
+
     const handleLogout = () => {
         handleMenuClose();
         auth.logoutUser();
@@ -57,7 +62,15 @@ export default function AppBanner() {
     }
 
     const handleHomeButton = () => {
-        store.closeList();
+        store.loadIdNamePairs();
+    }
+
+    const handleAllListsbySong = () => {
+        store.loadPublishedIdNamePairs();
+    }
+
+    const handleAllListsbyUser = () => {
+        store.loadPublishedIdNamePairs();
     }
 
     const menuId = 'primary-search-account-menu';
@@ -118,7 +131,7 @@ export default function AppBanner() {
             onClose={handleSortMenuClose}
         >
             <MenuItem onClick={handleSortName}>Name (A-Z)</MenuItem>
-            <MenuItem onClick={store.sortByDate}>Publish Date (Newest)</MenuItem>
+            <MenuItem onClick={handleSortDate}>Publish Date (Newest)</MenuItem>
             <MenuItem onClick={handleLogout}>Listens (High-Low)</MenuItem>
             <MenuItem onClick={handleLogout}>Likes (High-Low)</MenuItem>
             <MenuItem onClick={handleLogout}>Dislikes (High-Low)</MenuItem>
@@ -152,12 +165,12 @@ export default function AppBanner() {
                         <HomeIcon/>
                     </Link>
                     <Link style={{ textDecoration: 'none', color: 'white' }} to='/'
-                        onClick={handleHomeButton}
+                        onClick={handleAllListsbySong}
                     >
                         <PersonIcon/>
                     </Link>
                     <Link style={{ textDecoration: 'none', color: 'white' }} to='/'
-                        onClick={handleHomeButton}
+                        onClick={handleAllListsbyUser}
                     >
                         <GroupIcon/>
                     </Link>  
