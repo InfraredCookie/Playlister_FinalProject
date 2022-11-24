@@ -26,6 +26,7 @@ export default function AppBanner() {
     const { store } = useContext(GlobalStoreContext);
     const [anchorEl, setAnchorEl] = useState(null);
     const [anchorEl2, setAnchorEl2] = useState(null);
+    const [text, setText] = useState("");
     const isMenuOpen = Boolean(anchorEl);
     const isMenuOpen2 = Boolean(anchorEl2);
 
@@ -55,6 +56,35 @@ export default function AppBanner() {
         handleSortMenuClose();
     }
 
+    const handleSortListens = () => {
+        store.sortByListens();
+        handleSortMenuClose();
+    }
+
+    const handleSortLikes = () => {
+        store.sortByLikes();
+        handleSortMenuClose();
+    }
+    
+    const handleSortDislikes = () => {
+        store.sortByDislikes();
+        handleSortMenuClose();
+    }
+
+    function handleKeyPress(event) {
+        if (event.code === "Enter") {
+            if(text == "") {
+                store.filterByName(text)
+            } else {
+                store.filterByName(text)
+            }
+        }
+    }
+
+    function handleUpdateText(event) {
+        setText(event.target.value);
+    }
+
     const handleLogout = () => {
         handleMenuClose();
         auth.logoutUser();
@@ -66,11 +96,11 @@ export default function AppBanner() {
     }
 
     const handleAllListsbySong = () => {
-        store.loadPublishedIdNamePairs();
+        store.loadPublishedIdNamePairs("ALL");
     }
 
     const handleAllListsbyUser = () => {
-        store.loadPublishedIdNamePairs();
+        store.loadPublishedIdNamePairs("USERS");
     }
 
     const menuId = 'primary-search-account-menu';
@@ -132,9 +162,9 @@ export default function AppBanner() {
         >
             <MenuItem onClick={handleSortName}>Name (A-Z)</MenuItem>
             <MenuItem onClick={handleSortDate}>Publish Date (Newest)</MenuItem>
-            <MenuItem onClick={handleLogout}>Listens (High-Low)</MenuItem>
-            <MenuItem onClick={handleLogout}>Likes (High-Low)</MenuItem>
-            <MenuItem onClick={handleLogout}>Dislikes (High-Low)</MenuItem>
+            <MenuItem onClick={handleSortListens}>Listens (High-Low)</MenuItem>
+            <MenuItem onClick={handleSortLikes}>Likes (High-Low)</MenuItem>
+            <MenuItem onClick={handleSortDislikes}>Dislikes (High-Low)</MenuItem>
         </Menu>
 
     let editToolbar = "";
@@ -184,7 +214,9 @@ export default function AppBanner() {
                                 </InputAdornment>
                             ),
                         }} 
-                        variant="standard" 
+                        variant="standard"
+                        onKeyPress={handleKeyPress}
+                        onChange={handleUpdateText}
                     />
                 </div>
             );
