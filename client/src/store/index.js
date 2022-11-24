@@ -290,7 +290,8 @@ function GlobalStoreContextProvider(props) {
     // THIS FUNCTION CREATES A NEW LIST
     store.createNewList = async function () {
         let newListName = "Untitled" + store.newListCounter;
-        const response = await api.createPlaylist(newListName, [], auth.user.email);
+        let userName = auth.user.firstName + " " + auth.user.lastName;
+        const response = await api.createPlaylist(newListName, [], auth.user.email, userName);
         console.log("createNewList response: " + response);
         if (response.status === 201) {
             tps.clearAllTransactions();
@@ -715,6 +716,16 @@ function GlobalStoreContextProvider(props) {
         asyncSortByDislikes()
     }
 
+    store.filterPlaylists = function(input) {
+        input = input.toLowerCase()
+        if(store.currentView === "HOME" || store.currentView === "ALL") {
+            store.filterByName(input)
+        }
+        if(store.currentView === "USERS") {
+            store.filterByAuthor(input)
+        }
+    }
+
     store.filterByName = function(input) {
         async function asyncFilterByName(input) {
             let response = null
@@ -744,7 +755,39 @@ function GlobalStoreContextProvider(props) {
                 payload: idNamePairs
             });
         }
-        asyncFilterByName(input.toLowerCase())
+        asyncFilterByName(input)
+    }
+
+    store.filterByAuthor = function(input) {
+        async function asyncFilterByAuthor(input) {
+            let response = null
+            if(store.currentView === "HOME") {
+                response = await api.getPlaylistPairs()
+            } else if (store.currentView === "ALL" || store.currentView === "USERS") {
+                response = await api.getPublishedPlaylistPairs()
+            }
+            let pairs = response.data.idNamePairs
+            let playlists = [];
+            for (let key in pairs) {
+                let id = pairs[key]._id;
+                let response = await api.getPlaylistById(id)
+                playlists.push(response.data.playlist)
+            }
+            playlists = playlists.filter(playlist => playlist.ownerName.toLowerCase().includes(input))
+            let idNamePairs = []
+            for (let key in playlists) {
+                let pair = {
+                    _id: playlists[key]._id,
+                    name: playlists[key].name
+                };
+                idNamePairs.push(pair)
+            }
+            storeReducer({
+                type: GlobalStoreActionType.UPDATE_ID_NAME_PAIRS,
+                payload: idNamePairs
+            });
+        }
+        asyncFilterByAuthor(input)
     }
     
     return (

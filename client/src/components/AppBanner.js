@@ -73,11 +73,7 @@ export default function AppBanner() {
 
     function handleKeyPress(event) {
         if (event.code === "Enter") {
-            if(text == "") {
-                store.filterByName(text)
-            } else {
-                store.filterByName(text)
-            }
+            store.filterPlaylists(text)
         }
     }
 

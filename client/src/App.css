@@ -166,11 +166,21 @@ body {
   position: absolute;
   left: 0%;
   top: 10%;
-  width: 100%;
+  width: 50%;
   height: 90%;
   display: flex;
   flex-direction: column;
-  overflow: scroll;
+  overflow-y: scroll;
+}
+
+#sidescreen {
+  position: absolute;
+  left: 50%;
+  top: 10%;
+  width: 50%;
+  height: 90%;
+  display: flex;
+  flex-direction: column;
 }
 
 .list-card,
