@@ -3,8 +3,6 @@ import { GlobalStoreContext } from '../store'
 import ListCard from './ListCard.js'
 import MUIDeleteModal from './MUIDeleteModal'
 
-import AddIcon from '@mui/icons-material/Add';
-import Fab from '@mui/material/Fab'
 import List from '@mui/material/List';
 import Typography from '@mui/material/Typography'
 import Button from '@mui/material/Button';
@@ -15,7 +13,7 @@ import Button from '@mui/material/Button';
 */
 const HomeScreen = () => {
     const { store } = useContext(GlobalStoreContext);
-    const [view, setView] = useState("");
+    const [sideView, setSideView] = useState("");
 
     const style = {
         width: 100,
@@ -24,33 +22,41 @@ const HomeScreen = () => {
         fontSize: 12
     };
 
+    function getHomeView() {
+        if(store.currentView === "HOME"){
+            return("Home")
+        }
+        if(store.currentView === "ALL"){
+            return("All Lists")
+        }
+        if(store.currentView === "USERS"){
+            return("Seach By User")
+        }
+    }
+
     useEffect(() => {
         store.loadIdNamePairs();
     }, []);
 
-    function handleCreateNewList() {
-        store.createNewList();
-    }
-
     function handleViewPlayer() {
-        setView("Player");
+        setSideView("Player");
     }
 
 
     function handleViewComments() {
-        setView("Comments");
+        setSideView("Comments");
     }
 
 
     function handleSidescreen() {
-        if(view === "Player") {
+        if(sideView === "Player") {
             return (
                 <div>
                     "Player"
                 </div>
             )
         }
-        if(view === "Comments") {
+        if(sideView === "Comments") {
             return (
                 <div>
                     "Comments"
@@ -78,15 +84,7 @@ const HomeScreen = () => {
     return (
         <div id="playlist-selector">
             <div id="list-selector-heading">
-            <Fab 
-                color="primary" 
-                aria-label="add"
-                id="add-list-button"
-                onClick={handleCreateNewList}
-            >
-                <AddIcon />
-            </Fab>
-                <Typography variant="h2">Your Lists</Typography>
+                <Typography variant="h2">{getHomeView()}</Typography>
             </div>
             <div id="list-selector-list">
                 {

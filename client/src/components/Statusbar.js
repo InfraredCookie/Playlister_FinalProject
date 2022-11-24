@@ -1,6 +1,9 @@
-import { useContext } from 'react'
+import { Fragment, useContext } from 'react'
 import { GlobalStoreContext } from '../store'
+import AuthContext from '../auth';
 import { Typography } from '@mui/material'
+import AddIcon from '@mui/icons-material/Add';
+import Fab from '@mui/material/Fab'
 
 /*
     Our Status bar React component goes at the bottom of our UI.
@@ -9,12 +12,33 @@ import { Typography } from '@mui/material'
 */
 function Statusbar() {
     const { store } = useContext(GlobalStoreContext);
-    let text ="";
-    if (store.currentList)
-        text = store.currentList.name;
+    const { auth } = useContext(AuthContext);
+
+    function handleCreateNewList() {
+        store.createNewList();
+    }
+
+    function getAddIcon(){
+        if(auth.loggedIn) {
+            return(
+                <Fragment>
+                    <Fab 
+                    color="primary" 
+                    aria-label="add"
+                    id="add-list-button"
+                    onClick={handleCreateNewList}
+                    >
+                        <AddIcon />
+                    </Fab>
+                    <Typography variant="h4" sx={{p: 1}}>Add List</Typography>
+                </Fragment>
+            )
+        }
+    }
+
     return (
         <div id="playlister-statusbar">
-            <Typography variant="h4">{text}</Typography>
+            {getAddIcon()}
         </div>
     );
 }

@@ -6,7 +6,10 @@ import EditIcon from '@mui/icons-material/Edit';
 import IconButton from '@mui/material/IconButton';
 import ListItem from '@mui/material/ListItem';
 import TextField from '@mui/material/TextField';
-
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import ThumbUpIcon from '@mui/icons-material/ThumbUp';
+import ThumbDownIcon from '@mui/icons-material/ThumbDown';
 /*
     This is a card in our list of top 5 lists. It lets select
     a list for editing and it has controls for changing its 
@@ -18,6 +21,7 @@ function ListCard(props) {
     const { store } = useContext(GlobalStoreContext);
     const [editActive, setEditActive] = useState(false);
     const [text, setText] = useState("");
+    const [drop, setDrop] = useState(false);
     const { idNamePair, selected } = props;
 
     function handleLoadList(event, id) {
@@ -69,6 +73,19 @@ function ListCard(props) {
         setText(event.target.value);
     }
 
+    function handleDropdown(event) {
+        event.stopPropagation();
+        setDrop(!drop)
+    }
+
+    function handleLike(event) {
+        event.stopPropagation();
+    }
+
+    function handleDislike(event) {
+        event.stopPropagation();
+    }
+
     let selectClass = "unselected-list-card";
     if (selected) {
         selectClass = "selected-list-card";
@@ -81,25 +98,61 @@ function ListCard(props) {
         <ListItem
             id={idNamePair._id}
             key={idNamePair._id}
-            sx={{ marginTop: '15px', display: 'flex', p: 1, bgcolor: 'background.paper' }}
-            style={{ width: '100%', fontSize: '48pt' }}
+            sx={{ marginTop: '15px', display: 'flex', flexDirection: 'column', p: 1, bgcolor: 'background.paper' }}
+            style={{ width: '100%' }}
             button
             onClick={(event) => {
                 handleLoadList(event, idNamePair._id)
             }}
         >
-            <Box sx={{ p: 1, flexGrow: 1, textOverflow: "ellipsis", overflow: "hidden" }}>{idNamePair.name}</Box>
-            <Box sx={{ p: 1 }}>
-                <IconButton onClick={handleToggleEdit} aria-label='edit'>
-                    <EditIcon style={{fontSize:'48pt'}} />
-                </IconButton>
+            <Box 
+                sx={{ display: 'flex' }}
+                style={{ width: '100%', fontSize: '36pt' }}
+            >
+                <Box sx={{ p: 1, flexGrow: 1, textOverflow: "ellipsis", overflow: "hidden" }}>{idNamePair.name}</Box>
+                <Box sx={{ p: 1 }}>
+                    <IconButton onClick={handleToggleEdit} aria-label='edit'>
+                        <EditIcon style={{fontSize:'24pt'}} />
+                    </IconButton>
+                </Box>
+                <Box sx={{ p: 1 }}>
+                    <IconButton onClick={(event) => {
+                            handleDeleteList(event, idNamePair._id)
+                        }} aria-label='delete'>
+                        <DeleteIcon style={{fontSize:'24pt'}} />
+                    </IconButton>
+                </Box>
+                <Box sx={{ p: 1 }}>
+                    <IconButton onClick={handleDropdown} aria-label='dropdown'>
+                        {drop ? <KeyboardArrowDownIcon style={{fontSize:'24pt'}} /> : <KeyboardArrowUpIcon style={{fontSize:'24pt'}} /> }
+                    </IconButton>
+                </Box>
             </Box>
-            <Box sx={{ p: 1 }}>
-                <IconButton onClick={(event) => {
-                        handleDeleteList(event, idNamePair._id)
-                    }} aria-label='delete'>
-                    <DeleteIcon style={{fontSize:'48pt'}} />
-                </IconButton>
+            <Box 
+                sx={{ display: 'flex' }}
+                style={{ width: '100%', fontSize: '12pt', alignItems: 'center'}}
+            >
+                <Box sx={{ p: 1, flexGrow: 1 }}>
+                    Author: Placeholder
+                </Box>
+                <Box sx={{ p: 1, textOverflow: "ellipsis", overflow: "hidden" }}>
+                    Published: 0/00/00
+                </Box>
+                <Box sx={{ p: 1, textOverflow: "ellipsis", overflow: "hidden" }}>
+                    Views: 0
+                </Box>
+                <Box sx={{ p: 1, textOverflow: "ellipsis", overflow: "hidden" }}>
+                    <IconButton onClick={handleLike} aria-label='like'>
+                        <ThumbUpIcon style={{ color:'#81c784' }} />
+                    </IconButton>
+                    0
+                </Box>
+                <Box sx={{ p: 1, textOverflow: "ellipsis", overflow: "hidden" }}>
+                    <IconButton onClick={handleDislike} aria-label='dislike'>
+                        <ThumbDownIcon style={{ color:'#e57373' }}/>
+                    </IconButton>
+                    0
+                </Box>
             </Box>
         </ListItem>
 
