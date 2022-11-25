@@ -22,7 +22,7 @@ function ListCard(props) {
     const [editActive, setEditActive] = useState(false);
     const [text, setText] = useState("");
     const [drop, setDrop] = useState(false);
-    const { idNamePair, selected } = props;
+    const { pair, selected } = props;
 
     function handleLoadList(event, id) {
         console.log("handleLoadList for " + id);
@@ -96,20 +96,20 @@ function ListCard(props) {
     }
     let cardElement =
         <ListItem
-            id={idNamePair._id}
-            key={idNamePair._id}
+            id={pair._id}
+            key={pair._id}
             sx={{ marginTop: '15px', display: 'flex', flexDirection: 'column', p: 1, bgcolor: 'background.paper' }}
             style={{ width: '100%' }}
             button
             onClick={(event) => {
-                handleLoadList(event, idNamePair._id)
+                handleLoadList(event, pair._id)
             }}
         >
             <Box 
                 sx={{ display: 'flex' }}
                 style={{ width: '100%', fontSize: '36pt' }}
             >
-                <Box sx={{ p: 1, flexGrow: 1, textOverflow: "ellipsis", overflow: "hidden" }}>{idNamePair.name}</Box>
+                <Box sx={{ p: 1, flexGrow: 1, textOverflow: "ellipsis", overflow: "hidden" }}>{pair.name}</Box>
                 <Box sx={{ p: 1 }}>
                     <IconButton onClick={handleToggleEdit} aria-label='edit'>
                         <EditIcon style={{fontSize:'24pt'}} />
@@ -117,7 +117,7 @@ function ListCard(props) {
                 </Box>
                 <Box sx={{ p: 1 }}>
                     <IconButton onClick={(event) => {
-                            handleDeleteList(event, idNamePair._id)
+                            handleDeleteList(event, pair._id)
                         }} aria-label='delete'>
                         <DeleteIcon style={{fontSize:'24pt'}} />
                     </IconButton>
@@ -133,25 +133,25 @@ function ListCard(props) {
                 style={{ width: '100%', fontSize: '12pt', alignItems: 'center'}}
             >
                 <Box sx={{ p: 1, flexGrow: 1 }}>
-                    Author: Placeholder
+                    Author: {pair.ownerName}
                 </Box>
                 <Box sx={{ p: 1, textOverflow: "ellipsis", overflow: "hidden" }}>
                     Published: 0/00/00
                 </Box>
                 <Box sx={{ p: 1, textOverflow: "ellipsis", overflow: "hidden" }}>
-                    Views: 0
+                    Listens: {pair.listens}
                 </Box>
                 <Box sx={{ p: 1, textOverflow: "ellipsis", overflow: "hidden" }}>
                     <IconButton onClick={handleLike} aria-label='like'>
                         <ThumbUpIcon style={{ color:'#81c784' }} />
                     </IconButton>
-                    0
+                    {pair.likes}
                 </Box>
                 <Box sx={{ p: 1, textOverflow: "ellipsis", overflow: "hidden" }}>
                     <IconButton onClick={handleDislike} aria-label='dislike'>
                         <ThumbDownIcon style={{ color:'#e57373' }}/>
                     </IconButton>
-                    0
+                    {pair.dislikes}
                 </Box>
             </Box>
         </ListItem>
@@ -162,14 +162,14 @@ function ListCard(props) {
                 margin="normal"
                 required
                 halfwidth="true"
-                id={"list-" + idNamePair._id}
+                id={"list-" + pair._id}
                 label="Playlist Name"
                 name="name"
                 autoComplete="Playlist Name"
                 className='list-card'
                 onKeyPress={handleKeyPress}
                 onChange={handleUpdateText}
-                defaultValue={idNamePair.name}
+                defaultValue={pair.name}
                 inputProps={{style: {fontSize: 48}}}
                 InputLabelProps={{style: {fontSize: 24}}}
                 autoFocus

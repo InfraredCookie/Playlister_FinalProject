@@ -6,6 +6,7 @@ import MUIDeleteModal from './MUIDeleteModal'
 import List from '@mui/material/List';
 import Typography from '@mui/material/Typography'
 import Button from '@mui/material/Button';
+import apis from '../store/store-request-api';
 /*
     This React component lists all the top5 lists in the UI.
     
@@ -71,10 +72,10 @@ const HomeScreen = () => {
         listCard = 
             <List sx={{ width: '90%', left: '5%' }}>
             {
-                store.idNamePairs.map((pair) => (
+                store.currentViewPlaylists.map((pair) => (
                     <ListCard
                         key={pair._id}
-                        idNamePair={pair}
+                        pair={pair}
                         selected={false}
                     />
                 ))

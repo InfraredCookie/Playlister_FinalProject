@@ -141,6 +141,36 @@ getPlaylistPairs = async (req, res) => {
         asyncFindList(user.email);
     }).catch(err => console.log(err))
 }
+
+getUserPlaylists = async (req, res) => {
+    await User.findOne({ _id: req.userId }, (err, user) => {
+        console.log("find user with id " + req.userId);
+        async function asyncGetUserPlaylists(email) {
+            console.log("find all Playlists owned by " + email);
+            await Playlist.find({ ownerEmail: email }, (err, playlists) => {
+                console.log("found Playlists: " + JSON.stringify(playlists));
+                if (err) {
+                    return res.status(400).json({ success: false, error: err })
+                }
+                if (!playlists) {
+                    return res
+                        .status(404)
+                        .json({ success: false, error: 'Playlists not found' })
+                }
+                else {
+                    let pairs = [];
+                    for (let key in playlists) {
+                        let list = playlists[key];
+                        pairs.push(list);
+                    }
+                    return res.status(200).json({ success: true, playlists: pairs })
+                }
+            }).catch(err => console.log(err))
+        }
+        asyncGetUserPlaylists(user.email);
+    }).catch(err => console.log(err))
+}
+
 //Get all published playlists
 getPublishedPlaylistPairs = async (req, res) => {
     console.log("getPublishedPlaylistPairs");
@@ -173,6 +203,32 @@ getPublishedPlaylistPairs = async (req, res) => {
         }).catch(err => console.log(err))
     }
     asyncFindPublishedList()
+}
+
+getPublishedPlaylists = async (req, res) => {
+    console.log("getPublishedPlaylistPairs");
+    async function asyncGetPublishedPlaylists() {
+        await Playlist.find({ isPublished: true }, (err, playlists) => {
+            console.log("found Playlists: " + JSON.stringify(playlists));
+            if (err) {
+                return res.status(400).json({ success: false, error: err })
+            }
+            if (!playlists) {
+                return res
+                    .status(404)
+                    .json({ success: false, error: 'Playlists not found' })
+            }
+            else {
+                let pairs = [];
+                    for (let key in playlists) {
+                        let list = playlists[key];
+                        pairs.push(list);
+                    }
+                return res.status(200).json({ success: true, playlists: pairs })
+            }
+        }).catch(err => console.log(err))
+    }
+    asyncGetPublishedPlaylists()
 }
 
 getPlaylists = async (req, res) => {
@@ -252,7 +308,9 @@ module.exports = {
     deletePlaylist,
     getPlaylistById,
     getPlaylistPairs,
+    getUserPlaylists,
     getPublishedPlaylistPairs,
+    getPublishedPlaylists,
     getPlaylists,
     updatePlaylist
 }
