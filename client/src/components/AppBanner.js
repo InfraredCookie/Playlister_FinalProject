@@ -20,6 +20,7 @@ import TextField from '@mui/material/TextField';
 import SearchIcon from '@mui/icons-material/Search';
 import InputAdornment from '@mui/material/InputAdornment';
 import MenuIcon from '@mui/icons-material/Menu';
+import ClearIcon from '@mui/icons-material/Clear';
 
 export default function AppBanner() {
     const { auth } = useContext(AuthContext);
@@ -97,6 +98,11 @@ export default function AppBanner() {
 
     const handleAllListsbyUser = () => {
         store.loadPublishedIdNamePairs("USERS");
+    }
+
+    const handleCancel = () => {
+        store.filterPlaylists("")
+        setText("")
     }
 
     const menuId = 'primary-search-account-menu';
@@ -209,10 +215,16 @@ export default function AppBanner() {
                                     <SearchIcon/>
                                 </InputAdornment>
                             ),
+                            endAdornment: (
+                                <IconButton position="end">
+                                    <ClearIcon onClick={handleCancel}/>
+                                </IconButton>
+                            )
                         }} 
                         variant="standard"
                         onKeyPress={handleKeyPress}
                         onChange={handleUpdateText}
+                        value={text}
                     />
                 </div>
             );

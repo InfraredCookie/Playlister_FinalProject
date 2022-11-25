@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react'
+import { Fragment, useContext, useState } from 'react'
 import { GlobalStoreContext } from '../store'
 import Box from '@mui/material/Box';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -86,6 +86,27 @@ function ListCard(props) {
         event.stopPropagation();
     }
 
+    function handlePublished() {
+        if(!pair.isPublished) {
+            return (
+                <Fragment>
+                <Box sx={{ p: 1 }}>
+                    <IconButton onClick={handleToggleEdit} aria-label='edit'>
+                        <EditIcon style={{fontSize:'24pt'}} />
+                    </IconButton>
+                </Box>
+                <Box sx={{ p: 1 }}>
+                    <IconButton onClick={(event) => {
+                            handleDeleteList(event, pair._id)
+                        }} aria-label='delete'>
+                        <DeleteIcon style={{fontSize:'24pt'}} />
+                    </IconButton>
+                </Box>
+                </Fragment>
+            )
+        }
+    }
+
     let selectClass = "unselected-list-card";
     if (selected) {
         selectClass = "selected-list-card";
@@ -110,18 +131,7 @@ function ListCard(props) {
                 style={{ width: '100%', fontSize: '36pt' }}
             >
                 <Box sx={{ p: 1, flexGrow: 1, textOverflow: "ellipsis", overflow: "hidden" }}>{pair.name}</Box>
-                <Box sx={{ p: 1 }}>
-                    <IconButton onClick={handleToggleEdit} aria-label='edit'>
-                        <EditIcon style={{fontSize:'24pt'}} />
-                    </IconButton>
-                </Box>
-                <Box sx={{ p: 1 }}>
-                    <IconButton onClick={(event) => {
-                            handleDeleteList(event, pair._id)
-                        }} aria-label='delete'>
-                        <DeleteIcon style={{fontSize:'24pt'}} />
-                    </IconButton>
-                </Box>
+                {handlePublished()}
                 <Box sx={{ p: 1 }}>
                     <IconButton onClick={handleDropdown} aria-label='dropdown'>
                         {drop ? <KeyboardArrowDownIcon style={{fontSize:'24pt'}} /> : <KeyboardArrowUpIcon style={{fontSize:'24pt'}} /> }
@@ -136,7 +146,7 @@ function ListCard(props) {
                     Author: {pair.ownerName}
                 </Box>
                 <Box sx={{ p: 1, textOverflow: "ellipsis", overflow: "hidden" }}>
-                    Published: 0/00/00
+                    Published: {pair.createdAt.substring(0,10)}
                 </Box>
                 <Box sx={{ p: 1, textOverflow: "ellipsis", overflow: "hidden" }}>
                     Listens: {pair.listens}
