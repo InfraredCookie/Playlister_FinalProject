@@ -2,6 +2,8 @@ import React, { useContext, useEffect, useState } from 'react'
 import { GlobalStoreContext } from '../store'
 import ListCard from './ListCard.js'
 import MUIDeleteModal from './MUIDeleteModal'
+import MUIEditSongModal from './MUIEditSongModal'
+import MUIRemoveSongModal from './MUIRemoveSongModal'
 
 import List from '@mui/material/List';
 import Typography from '@mui/material/Typography'
@@ -22,6 +24,14 @@ const HomeScreen = () => {
         margin: .5,
         fontSize: 12
     };
+
+    let modalJSX = "";
+    if (store.isEditSongModalOpen()) {
+        modalJSX = <MUIEditSongModal />;
+    }
+    else if (store.isRemoveSongModalOpen()) {
+        modalJSX = <MUIRemoveSongModal />;
+    }
 
     function getHomeView() {
         if(store.currentView === "HOME"){
@@ -64,7 +74,6 @@ const HomeScreen = () => {
                 </div>
             )
         }
-        return(<div></div>);
     }
 
     let listCard = "";
@@ -92,6 +101,7 @@ const HomeScreen = () => {
                     listCard
                 }
                 <MUIDeleteModal />
+                { modalJSX }
             </div>
             <div id="sidescreen">
                 <div id="sidescreen-buttons">

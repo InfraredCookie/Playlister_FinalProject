@@ -1,5 +1,6 @@
 import { Fragment, useContext, useState } from 'react'
 import { GlobalStoreContext } from '../store'
+import SongCard from './SongCard.js'
 import Box from '@mui/material/Box';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
@@ -10,6 +11,7 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ThumbDownIcon from '@mui/icons-material/ThumbDown';
+import { Typography } from '@mui/material'
 /*
     This is a card in our list of top 5 lists. It lets select
     a list for editing and it has controls for changing its 
@@ -21,20 +23,22 @@ function ListCard(props) {
     const { store } = useContext(GlobalStoreContext);
     const [editActive, setEditActive] = useState(false);
     const [text, setText] = useState("");
-    const [drop, setDrop] = useState(false);
     const { pair, selected } = props;
 
     function handleLoadList(event, id) {
         console.log("handleLoadList for " + id);
-        if (!event.target.disabled) {
-            let _id = event.target.id;
-            if (_id.indexOf('list-card-text-') >= 0)
-                _id = ("" + _id).substring("list-card-text-".length);
-
-            console.log("load " + event.target.id);
-
-            // CHANGE THE CURRENT LIST
-            store.setCurrentList(id);
+        if (store.currentList == null || store.currentList._id !== pair._id) {
+            if (!event.target.disabled) {
+                let _id = event.target.id;
+                if (_id.indexOf('list-card-text-') >= 0)
+                    _id = ("" + _id).substring("list-card-text-".length);
+                console.log("load " + event.target.id);
+                // CHANGE THE CURRENT LIST
+                store.setCurrentList(id);
+            } 
+        }
+        if (store.currentList !== null && store.currentList._id === pair._id) { 
+            store.closeCurrentList();
         }
     }
 
@@ -73,11 +77,6 @@ function ListCard(props) {
         setText(event.target.value);
     }
 
-    function handleDropdown(event) {
-        event.stopPropagation();
-        setDrop(!drop)
-    }
-
     function handleLike(event) {
         event.stopPropagation();
     }
@@ -106,6 +105,26 @@ function ListCard(props) {
             )
         }
     }
+    
+    function handleCurrent() {
+        if (store.currentList !== null && store.currentList._id === pair._id && pair.songs.length === 0) { 
+            return (
+                <Typography variant="h4" sx={{p: 1}}>No Songs</Typography>
+            )
+        }
+        if (store.currentList !== null && store.currentList._id === pair._id) { 
+            return (
+                pair.songs.map((song, index) => (
+                    <SongCard
+                        id={'playlist-song-' + (index)}
+                        key={'playlist-song-' + (index)}
+                        index={index}
+                        song={song}
+                    />
+                )) 
+            )
+        }
+    }
 
     let selectClass = "unselected-list-card";
     if (selected) {
@@ -119,7 +138,7 @@ function ListCard(props) {
         <ListItem
             id={pair._id}
             key={pair._id}
-            sx={{ marginTop: '15px', display: 'flex', flexDirection: 'column', p: 1, bgcolor: 'background.paper' }}
+            sx={{ marginTop: '15px', display: 'flex', flexDirection: 'column', p: 1, bgcolor: 'background.paper', height: "fit-content" }}
             style={{ width: '100%' }}
             button
             onClick={(event) => {
@@ -133,8 +152,8 @@ function ListCard(props) {
                 <Box sx={{ p: 1, flexGrow: 1, textOverflow: "ellipsis", overflow: "hidden" }}>{pair.name}</Box>
                 {handlePublished()}
                 <Box sx={{ p: 1 }}>
-                    <IconButton onClick={handleDropdown} aria-label='dropdown'>
-                        {drop ? <KeyboardArrowDownIcon style={{fontSize:'24pt'}} /> : <KeyboardArrowUpIcon style={{fontSize:'24pt'}} /> }
+                    <IconButton aria-label='dropdown'>
+                        {(store.currentList !== null && store.currentList._id === pair._id) ? <KeyboardArrowDownIcon style={{fontSize:'24pt'}} /> : <KeyboardArrowUpIcon style={{fontSize:'24pt'}} /> }
                     </IconButton>
                 </Box>
             </Box>
@@ -164,6 +183,7 @@ function ListCard(props) {
                     {pair.dislikes}
                 </Box>
             </Box>
+            {handleCurrent()}
         </ListItem>
 
     if (editActive) {

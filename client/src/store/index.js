@@ -31,7 +31,8 @@ export const GlobalStoreActionType = {
     EDIT_SONG: "EDIT_SONG",
     REMOVE_SONG: "REMOVE_SONG",
     HIDE_MODALS: "HIDE_MODALS",
-    UPDATE_ID_NAME_PAIRS: "UPDATE_ID_NAME_PAIRS"
+    UPDATE_ID_NAME_PAIRS: "UPDATE_ID_NAME_PAIRS",
+    UPDATE_CURRENT_LIST: "UPDATE_CURRENT_LIST"
 }
 
 // WE'LL NEED THIS TO PROCESS TRANSACTIONS
@@ -247,6 +248,21 @@ function GlobalStoreContextProvider(props) {
                     currentViewPlaylists: payload.playlists
                 });
             }
+            case GlobalStoreActionType.UPDATE_CURRENT_LIST: {
+                return setStore({
+                    currentModal : store.currentModal,
+                    idNamePairs: payload.pairs,
+                    currentList: payload.currentList,
+                    currentSongIndex: store.currentSongIndex,
+                    currentSong: store.currentSong,
+                    newListCounter: store.newListCounter,
+                    listNameActive: false,
+                    listIdMarkedForDeletion: null,
+                    listMarkedForDeletion: null,
+                    currentView: store.currentView,
+                    currentViewPlaylists: payload.currentViewPlaylists
+                });
+            }
             default:
                 return store;
         }
@@ -314,14 +330,16 @@ function GlobalStoreContextProvider(props) {
         if (response.status === 201) {
             tps.clearAllTransactions();
             let newList = response.data.playlist;
+            //store.loadIdNamePairs();
+            /*
             storeReducer({
                 type: GlobalStoreActionType.CREATE_NEW_LIST,
                 payload: newList
             }
-            );
+            );*/
 
             // IF IT'S A VALID LIST THEN LET'S START EDITING IT
-            history.push("/playlist/" + newList._id);
+            //history.push("/playlist/" + newList._id);
         }
         else {
             console.log("API FAILED TO CREATE A NEW LIST");
@@ -474,7 +492,7 @@ function GlobalStoreContextProvider(props) {
                         type: GlobalStoreActionType.SET_CURRENT_LIST,
                         payload: playlist
                     });
-                    history.push("/playlist/" + playlist._id);
+                    //history.push("/playlist/" + playlist._id);
                 }
             }
         }
