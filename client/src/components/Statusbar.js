@@ -19,7 +19,7 @@ function Statusbar() {
     }
 
     function getAddIcon(){
-        if(auth.loggedIn) {
+        if(auth.loggedIn && store.currentView === "HOME") {
             return(
                 <Fragment>
                     <Fab 

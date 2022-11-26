@@ -89,14 +89,17 @@ export default function AppBanner() {
     }
 
     const handleHomeButton = () => {
+        store.closeCurrentList();
         store.loadIdNamePairs();
     }
 
     const handleAllListsbySong = () => {
+        store.closeCurrentList();
         store.loadPublishedIdNamePairs("ALL");
     }
 
     const handleAllListsbyUser = () => {
+        store.closeCurrentList();
         store.loadPublishedIdNamePairs("USERS");
     }
 
@@ -173,7 +176,7 @@ export default function AppBanner() {
     let menu = loggedOutMenu;
     if (auth.loggedIn) {
         menu = loggedInMenu;
-        if (store.currentList) {
+        if (store.currentList && !store.currentList.isPublished) {
             editToolbar = <EditToolbar />;
         }
     }

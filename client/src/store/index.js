@@ -111,8 +111,8 @@ function GlobalStoreContextProvider(props) {
             case GlobalStoreActionType.CREATE_NEW_LIST: {                
                 return setStore({
                     currentModal : CurrentModal.NONE,
-                    idNamePairs: store.idNamePairs,
-                    currentList: payload,
+                    idNamePairs: payload.pairsArray,
+                    currentList: payload.currentList,
                     currentSongIndex: -1,
                     currentSong: null,
                     newListCounter: store.newListCounter + 1,
@@ -120,7 +120,7 @@ function GlobalStoreContextProvider(props) {
                     listIdMarkedForDeletion: null,
                     listMarkedForDeletion: null,
                     currentView: store.currentView,
-                    currentViewPlaylists: store.currentViewPlaylists
+                    currentViewPlaylists: payload.playlists
                 })
             }
             // GET ALL THE LISTS SO WE CAN PRESENT THEM
@@ -144,7 +144,7 @@ function GlobalStoreContextProvider(props) {
                 return setStore({
                     currentModal : CurrentModal.DELETE_LIST,
                     idNamePairs: store.idNamePairs,
-                    currentList: null,
+                    currentList: store.currentList,
                     currentSongIndex: -1,
                     currentSong: null,
                     newListCounter: store.newListCounter,
@@ -250,17 +250,17 @@ function GlobalStoreContextProvider(props) {
             }
             case GlobalStoreActionType.UPDATE_CURRENT_LIST: {
                 return setStore({
-                    currentModal : store.currentModal,
-                    idNamePairs: payload.pairs,
-                    currentList: payload.currentList,
-                    currentSongIndex: store.currentSongIndex,
-                    currentSong: store.currentSong,
+                    currentModal : CurrentModal.NONE,
+                    idNamePairs: payload.pairsArray,
+                    currentList: store.currentList,
+                    currentSongIndex: -1,
+                    currentSong: null,
                     newListCounter: store.newListCounter,
                     listNameActive: false,
                     listIdMarkedForDeletion: null,
                     listMarkedForDeletion: null,
-                    currentView: store.currentView,
-                    currentViewPlaylists: payload.currentViewPlaylists
+                    currentView: payload.view,
+                    currentViewPlaylists: payload.playlists
                 });
             }
             default:
@@ -325,21 +325,36 @@ function GlobalStoreContextProvider(props) {
     store.createNewList = async function () {
         let newListName = "Untitled" + store.newListCounter;
         let userName = auth.user.firstName + " " + auth.user.lastName;
-        const response = await api.createPlaylist(newListName, [], auth.user.email, userName);
+        let response = await api.createPlaylist(newListName, [], auth.user.email, userName);
         console.log("createNewList response: " + response);
         if (response.status === 201) {
             tps.clearAllTransactions();
             let newList = response.data.playlist;
-            //store.loadIdNamePairs();
-            /*
+
+            let pairsArray
+            let playlists
+            response = await api.getPlaylistPairs();
+            if (response.data.success) {
+                pairsArray = response.data.idNamePairs;
+            }
+            else {
+                console.log("API FAILED TO GET THE LIST PAIRS");
+            }
+            response = await api.getUserPlaylists();
+            if (response.data.success) {
+                playlists = response.data.playlists;
+            }
+            else {
+                console.log("API FAILED TO GET THE LIST PAIRS");
+            }
             storeReducer({
                 type: GlobalStoreActionType.CREATE_NEW_LIST,
-                payload: newList
-            }
-            );*/
-
-            // IF IT'S A VALID LIST THEN LET'S START EDITING IT
-            //history.push("/playlist/" + newList._id);
+                payload: {
+                    pairsArray: pairsArray,
+                    playlists: playlists,
+                    currentList: newList
+                }
+            });
         }
         else {
             console.log("API FAILED TO CREATE A NEW LIST");
@@ -596,14 +611,43 @@ function GlobalStoreContextProvider(props) {
         tps.addTransaction(transaction);
     }
     store.updateCurrentList = function() {
+        let list = store.currentList;
         async function asyncUpdateCurrentList() {
             const response = await api.updatePlaylistById(store.currentList._id, store.currentList);
+            /*
             if (response.data.success) {
                 storeReducer({
                     type: GlobalStoreActionType.SET_CURRENT_LIST,
-                    payload: store.currentList
+                    payload: list
                 });
+            }*/
+            async function asyncUpdate() {
+                let pairsArray
+                let playlists
+                const response = await api.getPlaylistPairs();
+                if (response.data.success) {
+                    pairsArray = response.data.idNamePairs;
+                }
+                else {
+                    console.log("API FAILED TO GET THE LIST PAIRS");
+                }
+                const response2 = await api.getUserPlaylists();
+                if (response2.data.success) {
+                    playlists = response2.data.playlists;
+                }
+                else {
+                    console.log("API FAILED TO GET THE LIST PAIRS");
+                }
+                storeReducer({
+                    type: GlobalStoreActionType.UPDATE_CURRENT_LIST,
+                    payload: {
+                        pairsArray: pairsArray,
+                        view: "HOME",
+                        playlists: playlists
+                    }
+                })
             }
+            asyncUpdate();
         }
         asyncUpdateCurrentList();
     }
