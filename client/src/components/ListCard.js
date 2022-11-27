@@ -12,6 +12,7 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ThumbDownIcon from '@mui/icons-material/ThumbDown';
 import { Typography } from '@mui/material'
+import Button from '@mui/material/Button';
 /*
     This is a card in our list of top 5 lists. It lets select
     a list for editing and it has controls for changing its 
@@ -34,7 +35,7 @@ function ListCard(props) {
                     _id = ("" + _id).substring("list-card-text-".length);
                 console.log("load " + event.target.id);
                 // CHANGE THE CURRENT LIST
-                store.setCurrentList(id);
+                store.setCurrentList(pair);
             } 
         }
         if (store.currentList !== null && store.currentList._id === pair._id) { 
@@ -79,10 +80,26 @@ function ListCard(props) {
 
     function handleLike(event) {
         event.stopPropagation();
+        if(pair.isPublished) {
+            store.likePlaylist(pair);
+        }
     }
 
     function handleDislike(event) {
         event.stopPropagation();
+        if(pair.isPublished) {
+            store.dislikePlaylist(pair);
+        }
+    }
+
+    function handleDuplicate(event) {
+        event.stopPropagation();
+        store.duplicatePlaylist();
+    }
+
+    function handlePublish(event) {
+        event.stopPropagation();
+        store.publishPlaylist();
     }
 
     function handlePublished() {
@@ -102,6 +119,76 @@ function ListCard(props) {
                     </IconButton>
                 </Box>
                 </Fragment>
+            )
+        }
+    }
+
+    function handleButtons() {
+        if (store.currentList !== null && store.currentList._id === pair._id && pair.songs.length !== 0 && !pair.isPublished) { 
+            return (
+                <Box sx={{ p: 1 }}>
+                    <Button variant="contained"
+                    id="publish-button"
+                    className="modal-button"
+                    onClick={handlePublish}
+                    sx={{m: 1}}
+                    >
+                        Publish
+                    </Button>
+                    <Button variant="contained"
+                    id="publish-button"
+                    className="modal-button"
+                    onClick={handleDuplicate}
+                    sx={{m: 1}}
+                    >
+                        Duplicate
+                    </Button>
+                </Box>
+            )
+        } else if (store.currentList !== null && store.currentList._id === pair._id) {
+            return (
+                <Box sx={{ p: 1 }}>
+                    <Button variant="contained"
+                    id="publish-button"
+                    className="modal-button"
+                    onClick={handleDuplicate}
+                    >
+                        Duplicate
+                    </Button>
+                </Box>
+            )
+        }
+    }
+
+    function handleSubtext() {
+        if (pair.isPublished) { 
+            return (
+                <Box 
+                sx={{ display: 'flex' }}
+                style={{ width: '100%', fontSize: '12pt', alignItems: 'center'}}
+                >
+                    <Box sx={{ p: 1, flexGrow: 1 }}>
+                        Author: {pair.ownerName}
+                    </Box>
+                    <Box sx={{ p: 1, textOverflow: "ellipsis", overflow: "hidden" }}>
+                        Published: {pair.createdAt.substring(0,10)}
+                    </Box>
+                    <Box sx={{ p: 1, textOverflow: "ellipsis", overflow: "hidden" }}>
+                        Listens: {pair.listens}
+                    </Box>
+                    <Box sx={{ p: 1, textOverflow: "ellipsis", overflow: "hidden" }}>
+                        <IconButton onClick={handleLike} aria-label='like'>
+                            <ThumbUpIcon style={{ color:'#81c784' }} />
+                        </IconButton>
+                        {pair.likes}
+                    </Box>
+                    <Box sx={{ p: 1, textOverflow: "ellipsis", overflow: "hidden" }}>
+                        <IconButton onClick={handleDislike} aria-label='dislike'>
+                            <ThumbDownIcon style={{ color:'#e57373' }}/>
+                        </IconButton>
+                        {pair.dislikes}
+                    </Box>
+                </Box>
             )
         }
     }
@@ -157,33 +244,9 @@ function ListCard(props) {
                     </IconButton>
                 </Box>
             </Box>
-            <Box 
-                sx={{ display: 'flex' }}
-                style={{ width: '100%', fontSize: '12pt', alignItems: 'center'}}
-            >
-                <Box sx={{ p: 1, flexGrow: 1 }}>
-                    Author: {pair.ownerName}
-                </Box>
-                <Box sx={{ p: 1, textOverflow: "ellipsis", overflow: "hidden" }}>
-                    Published: {pair.createdAt.substring(0,10)}
-                </Box>
-                <Box sx={{ p: 1, textOverflow: "ellipsis", overflow: "hidden" }}>
-                    Listens: {pair.listens}
-                </Box>
-                <Box sx={{ p: 1, textOverflow: "ellipsis", overflow: "hidden" }}>
-                    <IconButton onClick={handleLike} aria-label='like'>
-                        <ThumbUpIcon style={{ color:'#81c784' }} />
-                    </IconButton>
-                    {pair.likes}
-                </Box>
-                <Box sx={{ p: 1, textOverflow: "ellipsis", overflow: "hidden" }}>
-                    <IconButton onClick={handleDislike} aria-label='dislike'>
-                        <ThumbDownIcon style={{ color:'#e57373' }}/>
-                    </IconButton>
-                    {pair.dislikes}
-                </Box>
-            </Box>
+            {handleSubtext()}
             {handleCurrent()}
+            {handleButtons()}
         </ListItem>
 
     if (editActive) {
