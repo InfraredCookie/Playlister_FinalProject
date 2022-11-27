@@ -29,6 +29,9 @@ const SideScreen = () => {
     }
     
     function handleComment() {
+        if (store.currentList !== null && store.currentList.isPublished) {
+            store.comment(comment);
+        }
         setComment("");
     }
 
@@ -38,7 +41,7 @@ const SideScreen = () => {
     
     function handleKeyPress(event) {
         if (event.code === "Enter") {
-            setComment("");
+            handleComment();
         }
     }
 
@@ -64,19 +67,49 @@ const SideScreen = () => {
     }
 
     let comments = "";
+    let index = 0
     if (store.currentList !== null && store.currentList.isPublished) {
         comments = 
             <List sx={{ width: '90%', left: '5%' }}>
             {
                 store.currentList.comments.map((comment) => (
-                    comment.author + comment.comment
+                    <div
+                        key={'comment-' + index}
+                        id={'song-' + index++ + '-card'}
+                        className='comment-card'
+                    >
+                        <u>{comment.author}</u> <br/>
+                        {comment.comment}
+                    </div>
                 ))
             }
             </List>;
+    } else if (store.currentList !== null) {
+        comments = 
+        <List sx={{ width: '90%', left: '5%' }}> 
+            <div
+                key={'comment-' + index}
+                id={'song-' + index++ + '-card'}
+                className='comment-card-unpublished'
+            >
+                Cannot comment on unpublished list
+            </div>
+        </List>;
+    } else {
+        comments = 
+        <List sx={{ width: '90%', left: '5%' }}> 
+            <div
+                key={'comment-' + index}
+                id={'song-' + index++ + '-card'}
+                className='comment-card-unpublished'
+            >
+                Select a list!
+            </div>
+        </List>;
     }
 
     function handleCommentField() {
-        if(sideView === "Comments") {
+        if(sideView === "Comments" && store.currentList !== null && store.currentList.isPublished) {
             return (
                 <TextField 
                     id="comment-field" 
@@ -91,6 +124,7 @@ const SideScreen = () => {
                             <IconButton 
                                 position="end"
                                 style={{color: '#1976d2'}}
+                                onClick={handleComment}
                             >
                                 <SendIcon/>
                             </IconButton>

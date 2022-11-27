@@ -105,6 +105,18 @@ getPlaylistById = async (req, res) => {
         asyncFindUser(list);
     }).catch(err => console.log(err))
 }
+
+getPublishedPlaylistById = async (req, res) => {
+    await Playlist.findById({ _id: req.params.id }, (err, list) => {
+        if (err) {
+            return res.status(400).json({ success: false, error: err });
+        }
+        console.log("Found list: " + JSON.stringify(list));
+        return res.status(200).json({ success: true, playlist: list })
+
+    }).catch(err => console.log(err))
+}
+
 getPlaylistPairs = async (req, res) => {
     console.log("getPlaylistPairs");
     await User.findOne({ _id: req.userId }, (err, user) => {
@@ -265,6 +277,31 @@ updatePlaylist = async (req, res) => {
             })
         }
 
+        console.log("correct user!");
+        console.log("req.body.name: " + req.body.name);
+
+        playlist.name = body.playlist.name;
+        playlist.songs = body.playlist.songs;
+        playlist.comments = body.playlist.comments;
+        playlist
+            .save()
+            .then(() => {
+                console.log("SUCCESS!!!");
+                return res.status(200).json({
+                    success: true,
+                    id: playlist._id,
+                    message: 'Playlist updated!',
+                })
+            })
+            .catch(error => {
+                console.log("FAILURE: " + JSON.stringify(error));
+                return res.status(404).json({
+                    error,
+                    message: 'Playlist not updated!',
+                })
+            })
+
+        /*
         // DOES THIS LIST BELONG TO THIS USER?
         async function asyncFindUser(list) {
             await User.findOne({ email: list.ownerEmail }, (err, user) => {
@@ -276,6 +313,7 @@ updatePlaylist = async (req, res) => {
 
                     list.name = body.playlist.name;
                     list.songs = body.playlist.songs;
+                    list.comments = body.playlist.comments;
                     list
                         .save()
                         .then(() => {
@@ -300,13 +338,14 @@ updatePlaylist = async (req, res) => {
                 }
             });
         }
-        asyncFindUser(playlist);
+        asyncFindUser(playlist);*/
     })
 }
 module.exports = {
     createPlaylist,
     deletePlaylist,
     getPlaylistById,
+    getPublishedPlaylistById,
     getPlaylistPairs,
     getUserPlaylists,
     getPublishedPlaylistPairs,
