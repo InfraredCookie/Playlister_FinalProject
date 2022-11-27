@@ -97,6 +97,7 @@ export default function MUIEditSongModal() {
                         id="edit-song-confirm-button" 
                         className="modal-button" 
                         onClick={handleConfirmEditSong}
+                        sx={{m: 1}}
                     >
                         Confirm
                     </Button>
@@ -104,7 +105,8 @@ export default function MUIEditSongModal() {
                         type="button" 
                         id="edit-song-cancel-button" 
                         className="modal-button" 
-                        onClick={handleCancelEditSong} 
+                        onClick={handleCancelEditSong}
+                        sx={{m: 1}}
                     >
                         Cancel
                     </Button>

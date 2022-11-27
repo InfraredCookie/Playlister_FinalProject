@@ -47,11 +47,13 @@ export default function MUIDeleteModal() {
                         id="dialog-yes-button"
                         className="modal-button"
                         onClick={handleDeleteList}
+                        sx={{m: 1}}
                     >Confirm</Button>
                     <Button variant="contained"
                         id="dialog-no-button"
                         className="modal-button"
                         onClick={handleCloseModal}
+                        sx={{m: 1}}
                     >Cancel</Button>
                 </div>
             </div>

@@ -1,9 +1,10 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { Fragment, useContext, useEffect, useState } from 'react'
 import { GlobalStoreContext } from '../store'
 import ListCard from './ListCard.js'
 import MUIDeleteModal from './MUIDeleteModal'
 import MUIEditSongModal from './MUIEditSongModal'
 import MUIRemoveSongModal from './MUIRemoveSongModal'
+import SideScreen from './SideScreen'
 
 import List from '@mui/material/List';
 import Typography from '@mui/material/Typography'
@@ -16,14 +17,6 @@ import apis from '../store/store-request-api';
 */
 const HomeScreen = () => {
     const { store } = useContext(GlobalStoreContext);
-    const [sideView, setSideView] = useState("");
-
-    const style = {
-        width: 100,
-        padding: 1.5, 
-        margin: .5,
-        fontSize: 12
-    };
 
     let modalJSX = "";
     if (store.isEditSongModalOpen()) {
@@ -48,33 +41,6 @@ const HomeScreen = () => {
     useEffect(() => {
         store.loadIdNamePairs();
     }, []);
-
-    function handleViewPlayer() {
-        setSideView("Player");
-    }
-
-
-    function handleViewComments() {
-        setSideView("Comments");
-    }
-
-
-    function handleSidescreen() {
-        if(sideView === "Player") {
-            return (
-                <div>
-                    "Player"
-                </div>
-            )
-        }
-        if(sideView === "Comments") {
-            return (
-                <div>
-                    "Comments"
-                </div>
-            )
-        }
-    }
 
     let listCard = "";
     if (store) {
@@ -103,29 +69,9 @@ const HomeScreen = () => {
                 <MUIDeleteModal />
                 { modalJSX }
             </div>
-            <div id="sidescreen">
-                <div id="sidescreen-buttons">
-                    <Button variant="contained"
-                        id="dialog-no-button"
-                        className="modal-button"
-                        sx={style}
-                        onClick={handleViewPlayer}
-                    >
-                        Player
-                    </Button>
-                    <Button variant="contained"
-                        id="dialog-no-button"
-                        className="modal-button"
-                        sx={style}
-                        onClick={handleViewComments}
-                    >
-                        Comments
-                    </Button>
-                </div>
-                <div id="sidescreen-main">
-                    {handleSidescreen()}
-                </div>
-            </div>
+            {
+                <SideScreen />
+            }
         </div>
     )
 }

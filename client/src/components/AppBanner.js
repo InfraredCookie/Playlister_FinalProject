@@ -219,8 +219,8 @@ export default function AppBanner() {
                                 </InputAdornment>
                             ),
                             endAdornment: (
-                                <IconButton position="end">
-                                    <ClearIcon onClick={handleCancel}/>
+                                <IconButton position="end" onClick={handleCancel}>
+                                    <ClearIcon/>
                                 </IconButton>
                             )
                         }} 

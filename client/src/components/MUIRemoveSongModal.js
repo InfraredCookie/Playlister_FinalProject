@@ -65,6 +65,7 @@ export default function MUIRemoveSongModal() {
                         id="remove-song-confirm-button" 
                         className="modal-button" 
                         onClick={handleConfirmRemoveSong} 
+                        sx={{m: 1}}
                     >
                         Confirm
                     </Button>
@@ -72,6 +73,7 @@ export default function MUIRemoveSongModal() {
                         id="remove-song-cancel-button" 
                         className="modal-button" 
                         onClick={handleCancelRemoveSong}  
+                        sx={{m: 1}}
                     >
                         Cancel
                     </Button>
