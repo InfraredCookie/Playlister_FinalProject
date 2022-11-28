@@ -10,7 +10,7 @@ const style = {
 export default function SplashScreen() {
     return (
         <div id="splash-screen">
-            <img src="/playlister.png" alt="image" />
+            <img src="/playlister.png" />
             <div id="splash-screen-title">
                 Welcome to the Playlister application!
             </div>
