@@ -171,7 +171,7 @@ function ListCard(props) {
                         Author: {pair.ownerName}
                     </Box>
                     <Box sx={{ p: 1, textOverflow: "ellipsis", overflow: "hidden" }}>
-                        Published: {pair.createdAt.substring(0,10)}
+                        Published: {pair.publishDate.substring(0,10)}
                     </Box>
                     <Box sx={{ p: 1, textOverflow: "ellipsis", overflow: "hidden" }}>
                         Listens: {pair.listens}

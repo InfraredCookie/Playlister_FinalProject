@@ -88,11 +88,12 @@ function SongCard(props) {
                 className={cardClass}
                 onClick={handleClick2}
             >
-                {index + 1}.
+                {index + 1}.&nbsp;
                 <a
                     id={'song-' + index + '-link'}
                     className="song-link"
-                    href={"https://www.youtube.com/watch?v=" + song.youTubeId}>
+                    href={"https://www.youtube.com/watch?v=" + song.youTubeId}
+                    target="_blank" rel="noopener noreferrer">
                     {song.title} by {song.artist}
                 </a>
             </div>

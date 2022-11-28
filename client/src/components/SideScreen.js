@@ -79,7 +79,12 @@ const SideScreen = () => {
                         className='comment-card'
                     >
                         <u>{comment.author}</u> <br/>
-                        {comment.comment}
+                        {(comment.comment === "pogg") ? <img src="/pogg.webp" alt="image" /> :
+                        (comment.comment === "pepeD") ? <img src="/pepeD.webp" alt="image" /> :
+                        (comment.comment === "muted") ? <img src="/muted.webp" alt="image" /> :
+                        (comment.comment === "catJAM") ? <img src="/catJAM.webp" alt="image" /> :
+                        (comment.comment === "ratJAM") ? <img src="/ratJAM.webp" alt="image" /> :
+                        comment.comment }
                     </div>
                 ))
             }

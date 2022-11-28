@@ -23,7 +23,8 @@ const playlistSchema = new Schema(
             comment: String,
             author: String
         }], required: true },
-        isPublished: Boolean
+        isPublished: { type: Boolean, required: true },
+        publishDate: { type: Date, required: true } 
     },
     { timestamps: true },
 )

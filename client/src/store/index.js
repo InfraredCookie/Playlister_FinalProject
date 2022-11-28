@@ -497,7 +497,9 @@ function GlobalStoreContextProvider(props) {
     // moveItem, updateItem, updateCurrentList, undo, and redo
     store.setCurrentList = function (playlist) {
         async function asyncSetCurrentList(playlist) {
-            playlist.listens++;
+            if(playlist.isPublished) {
+                playlist.listens++;
+            }
             let response = await api.updatePlaylistById(playlist._id, playlist);
             response = await api.getPublishedPlaylistById(playlist._id);
             if (response.data.success) {
@@ -1017,6 +1019,7 @@ function GlobalStoreContextProvider(props) {
     store.publishPlaylist = function() {
         let playlist = store.currentList;
         playlist.isPublished = true;
+        playlist.publishDate = Date.now();
         store.updateCurrentList();
     }
 
