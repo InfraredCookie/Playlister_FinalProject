@@ -288,6 +288,8 @@ updatePlaylist = async (req, res) => {
         playlist.isPublished = body.playlist.isPublished;
         playlist.listens = body.playlist.listens;
         playlist.publishDate = body.playlist.publishDate;
+        playlist.likeUsers = body.playlist.likeUsers;
+        playlist.dislikeUsers = body.playlist.dislikeUsers;
         playlist
             .save()
             .then(() => {

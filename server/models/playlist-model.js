@@ -24,7 +24,9 @@ const playlistSchema = new Schema(
             author: String
         }], required: true },
         isPublished: { type: Boolean, required: true },
-        publishDate: { type: Date, required: true } 
+        publishDate: { type: Date, required: true },
+        likeUsers: { type: [String], required: true },
+        dislikeUsers: { type: [String], required: true }
     },
     { timestamps: true },
 )

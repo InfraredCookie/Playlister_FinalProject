@@ -1,5 +1,6 @@
 import { Fragment, useContext, useState } from 'react'
 import { GlobalStoreContext } from '../store'
+import AuthContext from '../auth'
 import SongCard from './SongCard.js'
 import Box from '@mui/material/Box';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -22,6 +23,7 @@ import Button from '@mui/material/Button';
 */
 function ListCard(props) {
     const { store } = useContext(GlobalStoreContext);
+    const { auth } = useContext(AuthContext);
     const [editActive, setEditActive] = useState(false);
     const [text, setText] = useState("");
     const { pair, selected } = props;
@@ -145,6 +147,29 @@ function ListCard(props) {
                     </Button>
                 </Box>
             )
+        } else if (store.currentList !== null && store.currentList._id === pair._id && auth.user.email === store.currentList.ownerEmail) {
+            return (
+                <Box sx={{ p: 1 }}>
+                    <Button variant="contained"
+                    id="publish-button"
+                    className="modal-button"
+                    onClick={handleDuplicate}
+                    sx={{m: 1}}
+                    >
+                        Duplicate
+                    </Button>
+                    <Button variant="contained"
+                    id="publish-button"
+                    className="modal-button"
+                    onClick={(event) => {
+                        handleDeleteList(event, pair._id)
+                    }}
+                    sx={{m: 1}}
+                    >
+                        Delete
+                    </Button>
+                </Box>
+            )
         } else if (store.currentList !== null && store.currentList._id === pair._id) {
             return (
                 <Box sx={{ p: 1 }}>
@@ -176,18 +201,52 @@ function ListCard(props) {
                     <Box sx={{ p: 1, textOverflow: "ellipsis", overflow: "hidden" }}>
                         Listens: {pair.listens}
                     </Box>
-                    <Box sx={{ p: 1, textOverflow: "ellipsis", overflow: "hidden" }}>
-                        <IconButton onClick={handleLike} aria-label='like'>
-                            <ThumbUpIcon style={{ color:'#81c784' }} />
-                        </IconButton>
-                        {pair.likes}
-                    </Box>
-                    <Box sx={{ p: 1, textOverflow: "ellipsis", overflow: "hidden" }}>
-                        <IconButton onClick={handleDislike} aria-label='dislike'>
-                            <ThumbDownIcon style={{ color:'#e57373' }}/>
-                        </IconButton>
-                        {pair.dislikes}
-                    </Box>
+                    {handleLikeCounter()}
+                    {handleDislikeCounter()}
+                </Box>
+            )
+        }
+    }
+
+    function handleLikeCounter() {
+        if(pair.likeUsers.includes(auth.user.email)) {
+            return (
+                <Box sx={{ p: 1, textOverflow: "ellipsis", overflow: "hidden" }}>
+                    <IconButton onClick={handleLike} aria-label='like'>
+                        <ThumbUpIcon style={{ color:'#81c784' }} />
+                    </IconButton>
+                    {pair.likes}
+                </Box>
+            )
+        } else {
+            return (
+                <Box sx={{ p: 1, textOverflow: "ellipsis", overflow: "hidden" }}>
+                    <IconButton onClick={handleLike} aria-label='like'>
+                        <ThumbUpIcon/>
+                    </IconButton>
+                    {pair.likes}
+                </Box>
+            )
+        }
+    }
+
+    function handleDislikeCounter() {
+        if(pair.dislikeUsers.includes(auth.user.email)) {
+            return (
+                <Box sx={{ p: 1, textOverflow: "ellipsis", overflow: "hidden" }}>
+                    <IconButton onClick={handleDislike} aria-label='dislike'>
+                        <ThumbDownIcon style={{ color:'#e57373' }}/>
+                    </IconButton>
+                    {pair.dislikes}
+                </Box>
+            )
+        } else {
+            return (
+                <Box sx={{ p: 1, textOverflow: "ellipsis", overflow: "hidden" }}>
+                    <IconButton onClick={handleDislike} aria-label='dislike'>
+                        <ThumbDownIcon/>
+                    </IconButton>
+                    {pair.dislikes}
                 </Box>
             )
         }

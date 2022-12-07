@@ -4,6 +4,7 @@ import ListCard from './ListCard.js'
 import MUIDeleteModal from './MUIDeleteModal'
 import MUIEditSongModal from './MUIEditSongModal'
 import MUIRemoveSongModal from './MUIRemoveSongModal'
+import MUINameErrorModal from './MUINameErrorModal'
 import SideScreen from './SideScreen'
 
 import List from '@mui/material/List';
@@ -24,6 +25,9 @@ const HomeScreen = () => {
     }
     else if (store.isRemoveSongModalOpen()) {
         modalJSX = <MUIRemoveSongModal />;
+    }
+    else if (store.isNameErrorModalOpen()) {
+        modalJSX = <MUINameErrorModal />;
     }
 
     function getHomeView() {
