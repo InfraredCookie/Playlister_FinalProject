@@ -8,7 +8,7 @@ import TextField from '@mui/material/TextField';
 import IconButton from '@mui/material/IconButton';
 import SendIcon from '@mui/icons-material/Send';
 import List from '@mui/material/List';
-//import YouTubePlayer from './YouTubePlayer';
+import YouTubePlayer from './YouTubePlayer';
 
 const SideScreen = () => {
     const { store } = useContext(GlobalStoreContext);
@@ -117,8 +117,19 @@ const SideScreen = () => {
     }
 
     let player = ""
-    if (store.currentList !== null) {
-        //player = <YouTubePlayer />
+    if (store.currentList !== null && store.currentList.songs.length > 0) {
+        player = <YouTubePlayer />
+    } else if (store.currentList !== null) {
+        player = 
+            <List sx={{ width: '90%', left: '5%' }}> 
+                <div
+                    key={'comment-' + index}
+                    id={'song-' + index++ + '-card'}
+                    className='comment-card-unpublished'
+                >
+                    No Songs!
+                </div>
+            </List>
     } else {
         player = 
             <List sx={{ width: '90%', left: '5%' }}> 
