@@ -129,6 +129,15 @@ function AuthContextProvider(props) {
         }
     }
 
+    auth.guest = function() {
+        authReducer({
+            type: AuthActionType.LOGIN_USER,
+            payload: {
+                user: "GUEST"
+            }
+        })
+    }
+
     auth.logoutUser = async function() {
         const response = await api.logoutUser();
         if (response.status === 200) {
@@ -142,7 +151,9 @@ function AuthContextProvider(props) {
 
     auth.getUserInitials = function() {
         let initials = "";
-        if (auth.user) {
+        if (auth.user && auth.user === "GUEST") {
+            initials = "G"
+        } else if (auth.user) {
             initials += auth.user.firstName.charAt(0);
             initials += auth.user.lastName.charAt(0);
         }

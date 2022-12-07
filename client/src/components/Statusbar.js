@@ -33,6 +33,10 @@ function Statusbar() {
                     <Typography variant="h4" sx={{p: 1}}>Add List</Typography>
                 </Fragment>
             )
+        } else if(auth.user === "GUEST") {
+            return (
+                <Typography variant="h4" sx={{p: 1}}>Guest Mode</Typography>
+            )
         }
     }
 

@@ -1,4 +1,6 @@
 import Button from '@mui/material/Button'
+import { useContext } from 'react'
+import AuthContext from '../auth';
 const style = {
     width: 200,
     padding: 1, 
@@ -8,6 +10,12 @@ const style = {
 };
 
 export default function SplashScreen() {
+    const { auth } = useContext(AuthContext);
+
+    function handleGuest() {
+        auth.guest();
+    }
+
     return (
         <div id="splash-screen">
             <img src="/playlister.png" />
@@ -38,6 +46,7 @@ export default function SplashScreen() {
                     id="dialog-no-button"
                     className="modal-button"
                     sx={style}
+                    onClick={handleGuest}
                 >
                     Continue As Guest
                 </Button>

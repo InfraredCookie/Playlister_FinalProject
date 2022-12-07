@@ -190,15 +190,23 @@ export default function AppBanner() {
             return <AccountCircle />;
     }
 
+    function renderHomeButton() {
+        if (auth.user !== "GUEST") {
+            return (
+                <Link style={{ textDecoration: 'none', color: 'white' }} to='/'
+                        onClick={handleHomeButton}
+                    >
+                        <HomeIcon/>
+                </Link>
+            )
+        }
+    }
+
     function getIcons(loggedIn) {
         if (loggedIn) 
             return (
                 <div>
-                    <Link style={{ textDecoration: 'none', color: 'white' }} to='/'
-                        onClick={handleHomeButton}
-                    >
-                        <HomeIcon/>
-                    </Link>
+                    {renderHomeButton()}
                     <Link style={{ textDecoration: 'none', color: 'white' }} to='/'
                         onClick={handleAllListsbySong}
                     >

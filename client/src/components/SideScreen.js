@@ -1,5 +1,6 @@
 import React, { Fragment, useContext, useEffect, useState } from 'react'
 import { GlobalStoreContext } from '../store'
+import AuthContext from '../auth';
 
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
@@ -7,9 +8,11 @@ import TextField from '@mui/material/TextField';
 import IconButton from '@mui/material/IconButton';
 import SendIcon from '@mui/icons-material/Send';
 import List from '@mui/material/List';
+//import YouTubePlayer from './YouTubePlayer';
 
 const SideScreen = () => {
     const { store } = useContext(GlobalStoreContext);
+    const { auth } = useContext(AuthContext);
     const [sideView, setSideView] = useState("Player");
     const [comment, setComment] = useState("");
 
@@ -29,7 +32,7 @@ const SideScreen = () => {
     }
     
     function handleComment() {
-        if (store.currentList !== null && store.currentList.isPublished) {
+        if (store.currentList !== null && store.currentList.isPublished ) {
             store.comment(comment);
         }
         setComment("");
@@ -48,18 +51,18 @@ const SideScreen = () => {
     function handleSidescreen() {
         if(sideView === "Player") {
             return (
-                <div>
-                    "Player"
-                </div>
+                <Fragment>
+                <Box>
+                    {player}
+                </Box>
+                </Fragment>
             )
         }
         if(sideView === "Comments") {
             return (
                 <Fragment>
                 <Box>
-                    {
-                        comments
-                    }
+                    {comments}
                 </Box>
                 </Fragment>
             )
@@ -113,8 +116,25 @@ const SideScreen = () => {
         </List>;
     }
 
+    let player = ""
+    if (store.currentList !== null) {
+        //player = <YouTubePlayer />
+    } else {
+        player = 
+            <List sx={{ width: '90%', left: '5%' }}> 
+                <div
+                    key={'comment-' + index}
+                    id={'song-' + index++ + '-card'}
+                    className='comment-card-unpublished'
+                >
+                    Select a list!
+                </div>
+            </List>
+    }
+
+
     function handleCommentField() {
-        if(sideView === "Comments" && store.currentList !== null && store.currentList.isPublished) {
+        if(sideView === "Comments" && store.currentList !== null && store.currentList.isPublished && auth.user !== "GUEST") {
             return (
                 <TextField 
                     id="comment-field" 

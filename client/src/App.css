@@ -316,6 +316,16 @@ input {
   color: var(--swatch-neutral);
 }
 
+.playerControls {
+  font-size: 18pt;
+  margin: 10px;
+  padding: 20px;
+  border-radius: 25px;
+  width: 100;
+  border: 1px solid #000000;
+  overflow-wrap: anywhere;
+}
+
 /* THIS STYLE SHEET MANAGES STYLE FOR OUR MODAL, i.e. DIALOG BOX */
 
 .modal {

@@ -1,4 +1,5 @@
 import React, { Fragment, useContext, useEffect, useState } from 'react'
+import AuthContext from '../auth'
 import { GlobalStoreContext } from '../store'
 import ListCard from './ListCard.js'
 import MUIDeleteModal from './MUIDeleteModal'
@@ -18,6 +19,7 @@ import apis from '../store/store-request-api';
 */
 const HomeScreen = () => {
     const { store } = useContext(GlobalStoreContext);
+    const { auth } = useContext(AuthContext);
 
     let modalJSX = "";
     if (store.isEditSongModalOpen()) {
@@ -43,7 +45,11 @@ const HomeScreen = () => {
     }
 
     useEffect(() => {
-        store.loadIdNamePairs();
+        if (auth.user === "GUEST") {
+            store.loadPublishedIdNamePairs("ALL");
+        } else {
+            store.loadIdNamePairs();
+        }
     }, []);
 
     let listCard = "";

@@ -82,14 +82,14 @@ function ListCard(props) {
 
     function handleLike(event) {
         event.stopPropagation();
-        if(pair.isPublished) {
+        if(pair.isPublished && auth.user !== "GUEST") {
             store.likePlaylist(pair);
         }
     }
 
     function handleDislike(event) {
         event.stopPropagation();
-        if(pair.isPublished) {
+        if(pair.isPublished && auth.user !== "GUEST") {
             store.dislikePlaylist(pair);
         }
     }
@@ -170,7 +170,7 @@ function ListCard(props) {
                     </Button>
                 </Box>
             )
-        } else if (store.currentList !== null && store.currentList._id === pair._id) {
+        } else if (store.currentList !== null && store.currentList._id === pair._id && auth.user !== "GUEST") {
             return (
                 <Box sx={{ p: 1 }}>
                     <Button variant="contained"
