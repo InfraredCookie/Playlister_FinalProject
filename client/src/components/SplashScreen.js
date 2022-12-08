@@ -18,7 +18,7 @@ export default function SplashScreen() {
 
     return (
         <div id="splash-screen">
-            <img src="/playlister.png" />
+            <img src="/playlister.png" alt="Playlister Logo"/>
             <div id="splash-screen-title">
                 Welcome to the Playlister application!
             </div>
@@ -50,6 +50,9 @@ export default function SplashScreen() {
                 >
                     Continue As Guest
                 </Button>
+            </div>
+            <div id="splash-screen-credits">
+                Created by Preston Chang
             </div>
         </div>
     )

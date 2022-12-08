@@ -1,4 +1,4 @@
-import React, { Fragment, useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect } from 'react'
 import AuthContext from '../auth'
 import { GlobalStoreContext } from '../store'
 import ListCard from './ListCard.js'
@@ -10,8 +10,7 @@ import SideScreen from './SideScreen'
 
 import List from '@mui/material/List';
 import Typography from '@mui/material/Typography'
-import Button from '@mui/material/Button';
-import apis from '../store/store-request-api';
+
 /*
     This React component lists all the top5 lists in the UI.
     
@@ -61,7 +60,6 @@ const HomeScreen = () => {
                     <ListCard
                         key={pair._id}
                         pair={pair}
-                        selected={false}
                     />
                 ))
             }

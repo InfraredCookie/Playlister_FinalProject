@@ -53,7 +53,7 @@ function AuthContextProvider(props) {
             case AuthActionType.REGISTER_USER: {
                 return setAuth({
                     user: payload.user,
-                    loggedIn: true,
+                    loggedIn: false,
                     error: null
                 })
             }
@@ -92,8 +92,8 @@ function AuthContextProvider(props) {
                         user: response.data.user
                     }
                 })
-                history.push("/login");
-                auth.loginUser(email, password);
+                history.push("/");
+                //auth.loginUser(email, password);
             }
         } catch(error) {
             let message = error.response.data.errorMessage;

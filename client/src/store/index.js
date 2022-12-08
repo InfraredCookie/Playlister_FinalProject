@@ -1,13 +1,13 @@
 import { createContext, useContext, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import jsTPS from '../common/jsTPS'
-import api, { getPlaylistById } from './store-request-api'
+import api from './store-request-api'
 import CreateSong_Transaction from '../transactions/CreateSong_Transaction'
 import MoveSong_Transaction from '../transactions/MoveSong_Transaction'
 import RemoveSong_Transaction from '../transactions/RemoveSong_Transaction'
 import UpdateSong_Transaction from '../transactions/UpdateSong_Transaction'
 import AuthContext from '../auth'
-import { stepperClasses } from '@mui/material'
+
 /*
     This is our global data store. Note that it uses the Flux design pattern,
     which makes use of things like actions and reducers. 
@@ -34,7 +34,8 @@ export const GlobalStoreActionType = {
     HIDE_MODALS: "HIDE_MODALS",
     UPDATE_ID_NAME_PAIRS: "UPDATE_ID_NAME_PAIRS",
     UPDATE_CURRENT_LIST: "UPDATE_CURRENT_LIST",
-    NAME_ERROR: "NAME_ERROR"
+    NAME_ERROR: "NAME_ERROR",
+    NOW_PLAYING: "NOW_PLAYING"
 }
 
 // WE'LL NEED THIS TO PROCESS TRANSACTIONS
@@ -64,7 +65,8 @@ function GlobalStoreContextProvider(props) {
         listMarkedForDeletion: null,
         currentView: null,
         currentViewPlaylists: [],
-        sortType: "date"
+        sortType: "date",
+        songPlaying: -1
     });
     const history = useHistory();
 
@@ -93,7 +95,8 @@ function GlobalStoreContextProvider(props) {
                     listMarkedForDeletion: null,
                     currentView: store.currentView,
                     currentViewPlaylists: payload.playlists,
-                    sortType: store.sortType
+                    sortType: store.sortType,
+                    songPlaying: store.songPlaying
                 });
             }
             // STOP EDITING THE CURRENT LIST
@@ -110,7 +113,8 @@ function GlobalStoreContextProvider(props) {
                     listMarkedForDeletion: null,
                     currentView: store.currentView,
                     currentViewPlaylists: store.currentViewPlaylists,
-                    sortType: store.sortType
+                    sortType: store.sortType,
+                    songPlaying: store.songPlaying
                 })
             }
             // CREATE A NEW LIST
@@ -125,9 +129,10 @@ function GlobalStoreContextProvider(props) {
                     listNameActive: false,
                     listIdMarkedForDeletion: null,
                     listMarkedForDeletion: null,
-                    currentView: store.currentView,
+                    currentView: "HOME",
                     currentViewPlaylists: payload.playlists,
-                    sortType: store.sortType
+                    sortType: store.sortType,
+                    songPlaying: store.songPlaying
                 })
             }
             // GET ALL THE LISTS SO WE CAN PRESENT THEM
@@ -144,7 +149,8 @@ function GlobalStoreContextProvider(props) {
                     listMarkedForDeletion: null,
                     currentView: payload.view,
                     currentViewPlaylists: payload.playlists,
-                    sortType: store.sortType
+                    sortType: store.sortType,
+                    songPlaying: store.songPlaying
                 });
             }
             // PREPARE TO DELETE A LIST
@@ -161,7 +167,8 @@ function GlobalStoreContextProvider(props) {
                     listMarkedForDeletion: payload.playlist,
                     currentView: store.currentView,
                     currentViewPlaylists: store.currentViewPlaylists,
-                    sortType: store.sortType
+                    sortType: store.sortType,
+                    songPlaying: store.songPlaying
                 });
             }
             // UPDATE A LIST
@@ -178,7 +185,8 @@ function GlobalStoreContextProvider(props) {
                     listMarkedForDeletion: null,
                     currentView: store.currentView,
                     currentViewPlaylists: store.currentViewPlaylists,
-                    sortType: store.sortType
+                    sortType: store.sortType,
+                    songPlaying: store.songPlaying
                 });
             }
             // START EDITING A LIST NAME
@@ -195,7 +203,8 @@ function GlobalStoreContextProvider(props) {
                     listMarkedForDeletion: null,
                     currentView: store.currentView,
                     currentViewPlaylists: store.currentViewPlaylists,
-                    sortType: store.sortType
+                    sortType: store.sortType,
+                    songPlaying: store.songPlaying
                 });
             }
             // 
@@ -212,7 +221,8 @@ function GlobalStoreContextProvider(props) {
                     listMarkedForDeletion: null,
                     currentView: store.currentView,
                     currentViewPlaylists: store.currentViewPlaylists,
-                    sortType: store.sortType
+                    sortType: store.sortType,
+                    songPlaying: store.songPlaying
                 });
             }
             case GlobalStoreActionType.REMOVE_SONG: {
@@ -228,7 +238,8 @@ function GlobalStoreContextProvider(props) {
                     listMarkedForDeletion: null,
                     currentView: store.currentView,
                     currentViewPlaylists: store.currentViewPlaylists,
-                    sortType: store.sortType
+                    sortType: store.sortType,
+                    songPlaying: store.songPlaying
                 });
             }
             case GlobalStoreActionType.HIDE_MODALS: {
@@ -244,7 +255,8 @@ function GlobalStoreContextProvider(props) {
                     listMarkedForDeletion: null,
                     currentView: store.currentView,
                     currentViewPlaylists: store.currentViewPlaylists,
-                    sortType: store.sortType
+                    sortType: store.sortType,
+                    songPlaying: store.songPlaying
                 });
             }
             case GlobalStoreActionType.UPDATE_ID_NAME_PAIRS: {
@@ -260,7 +272,8 @@ function GlobalStoreContextProvider(props) {
                     listMarkedForDeletion: null,
                     currentView: store.currentView,
                     currentViewPlaylists: payload.playlists,
-                    sortType: payload.sort
+                    sortType: payload.sort,
+                    songPlaying: store.songPlaying
                 });
             }
             case GlobalStoreActionType.UPDATE_CURRENT_LIST: {
@@ -276,7 +289,8 @@ function GlobalStoreContextProvider(props) {
                     listMarkedForDeletion: null,
                     currentView: payload.view,
                     currentViewPlaylists: payload.playlists,
-                    sortType: store.sortType
+                    sortType: store.sortType,
+                    songPlaying: store.songPlaying
                 });
             }
             case GlobalStoreActionType.NAME_ERROR: {
@@ -292,7 +306,25 @@ function GlobalStoreContextProvider(props) {
                     listMarkedForDeletion: store.listMarkedForDeletion,
                     currentView: store.currentView,
                     currentViewPlaylists: store.currentViewPlaylists,
-                    sortType: store.sortType
+                    sortType: store.sortType,
+                    songPlaying: store.songPlaying
+                });
+            }
+            case GlobalStoreActionType.NOW_PLAYING: {
+                return setStore({
+                    currentModal : store.currentModal,
+                    idNamePairs: store.idNamePairs,
+                    currentList: store.currentList,
+                    currentSongIndex: -1,
+                    currentSong: store.currentSong,
+                    newListCounter: store.newListCounter,
+                    listNameActive: store.listNameActive,
+                    listIdMarkedForDeletion: store.listIdMarkedForDeletion,
+                    listMarkedForDeletion: store.listMarkedForDeletion,
+                    currentView: store.currentView,
+                    currentViewPlaylists: store.currentViewPlaylists,
+                    sortType: store.sortType,
+                    songPlaying: payload
                 });
             }
             default:
@@ -1182,6 +1214,13 @@ function GlobalStoreContextProvider(props) {
             type: GlobalStoreActionType.NAME_ERROR,
             payload: {}
         });        
+    }
+
+    store.playingNow = function(song) {
+        storeReducer({
+            type: GlobalStoreActionType.NOW_PLAYING,
+            payload: song
+        }); 
     }
 
     return (

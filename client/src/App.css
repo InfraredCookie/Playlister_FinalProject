@@ -78,6 +78,10 @@ body {
   font-size: 24px;
 }
 
+#splash-screen-credits {
+  font-size: 12px;
+}
+
 #edit-toolbar {
   background-color: transparent;
   float: right;
@@ -197,7 +201,7 @@ body {
   border-radius: 10px;
   width: 95%;
   border: 2px solid #000000;
-  background-color: #eeeeee;
+  background-color: #ffffff;
   overflow-wrap: anywhere;
 }
 
@@ -324,6 +328,13 @@ input {
   width: 100;
   border: 1px solid #000000;
   overflow-wrap: anywhere;
+  background-color: #ffffff;
+}
+
+.playing {
+  border: 2px solid #000000;
+  font-weight: bold;
+  background-color: #BBE0F2;
 }
 
 /* THIS STYLE SHEET MANAGES STYLE FOR OUR MODAL, i.e. DIALOG BOX */

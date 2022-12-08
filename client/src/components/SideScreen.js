@@ -1,4 +1,4 @@
-import React, { Fragment, useContext, useEffect, useState } from 'react'
+import React, { Fragment, useContext, useState } from 'react'
 import { GlobalStoreContext } from '../store'
 import AuthContext from '../auth';
 
@@ -82,11 +82,11 @@ const SideScreen = () => {
                         className='comment-card'
                     >
                         <u>{comment.author}</u> <br/>
-                        {(comment.comment === "pogg") ? <img src="/pogg.webp" /> :
-                        (comment.comment === "pepeD") ? <img src="/pepeD.webp" /> :
-                        (comment.comment === "muted") ? <img src="/muted.webp" /> :
-                        (comment.comment === "catJAM") ? <img src="/catJAM.webp" /> :
-                        (comment.comment === "ratJAM") ? <img src="/ratJAM.webp" /> :
+                        {(comment.comment === "pogg") ? <img src="/pogg.webp" alt="pogg"/> :
+                        (comment.comment === "pepeD") ? <img src="/pepeD.webp" alt="pepeD"/> :
+                        (comment.comment === "muted") ? <img src="/muted.webp" alt="muted"/> :
+                        (comment.comment === "catJAM") ? <img src="/catJAM.webp" alt="catJAM"/> :
+                        (comment.comment === "ratJAM") ? <img src="/ratJAM.webp" alt="ratJAM"/> :
                         comment.comment }
                     </div>
                 ))

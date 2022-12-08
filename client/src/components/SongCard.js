@@ -67,7 +67,7 @@ function SongCard(props) {
                     <a
                         id={'song-' + index + '-link'}
                         className="song-link"
-                        href={"https://www.youtube.com/watch?v=" + song.youTubeId}
+                        //href={"https://www.youtube.com/watch?v=" + song.youTubeId}
                         target="_blank" rel="noopener noreferrer">
                         {song.title} by {song.artist}
                     </a>
@@ -92,7 +92,7 @@ function SongCard(props) {
                 <a
                     id={'song-' + index + '-link'}
                     className="song-link"
-                    href={"https://www.youtube.com/watch?v=" + song.youTubeId}
+                    //href={"https://www.youtube.com/watch?v=" + song.youTubeId}
                     target="_blank" rel="noopener noreferrer">
                     {song.title} by {song.artist}
                 </a>
@@ -101,6 +101,9 @@ function SongCard(props) {
     }
 
     let cardClass = "list-card unselected-list-card";
+    if(index === store.songPlaying) {
+        cardClass += " playing"
+    }
     return (
         handlePublished()
     );

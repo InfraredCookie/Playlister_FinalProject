@@ -35,6 +35,7 @@ export default function YouTubePlayer() {
             player.playVideo()
         }
         setCurrentSong(0);
+        store.playingNow(0);
         setPrevList(playlist);
     }  
 
@@ -55,6 +56,7 @@ export default function YouTubePlayer() {
     // THIS FUNCTION LOADS THE CURRENT SONG INTO
     // THE PLAYER AND PLAYS IT
     function loadAndPlayCurrentSong(player) {
+        store.playingNow(currentSong);
         let song = playlist[currentSong].youTubeId;
         player.loadVideoById(song);
         player.playVideo();
@@ -63,6 +65,7 @@ export default function YouTubePlayer() {
     // THIS FUNCTION INCREMENTS THE PLAYLIST SONG TO THE NEXT ONE
     function incSong() {
         setCurrentSong(currentSong+1);
+        store.playingNow(currentSong+1);
         //setCurrentSong(currentSong % playlist.length);
     }
 
@@ -125,6 +128,7 @@ export default function YouTubePlayer() {
     function handlePrevious() {
         if(currentSong !== 0) {
             setCurrentSong(currentSong-1);
+            store.playingNow(currentSong-1);
             let song = playlist[currentSong].youTubeId;
             player.loadVideoById(song);
         }
@@ -133,6 +137,7 @@ export default function YouTubePlayer() {
     function handleSkip() {
         if(currentSong !== playlist.length-1) {
             setCurrentSong(currentSong+1);
+            store.playingNow(currentSong+1);
             let song = playlist[currentSong].youTubeId;
             player.loadVideoById(song);
         }
@@ -163,6 +168,7 @@ export default function YouTubePlayer() {
     function renderYouTube() {
         if(currentSong + 1 > playlist.length) {
             setCurrentSong(0);
+            store.playingNow(currentSong);
         } else {
             return(
                 <YouTube
@@ -177,10 +183,11 @@ export default function YouTubePlayer() {
     function renderPlayerControls() {
         if(currentSong + 1 > playlist.length) {
             setCurrentSong(0);
+            store.playingNow(currentSong);
         } else {
             return(
                 <div class="playerControls">
-                <center>Now Playing</center> <br/>
+                <b><center>Now Playing</center></b> <br/>
                 Playlist: {store.currentList.name} <br/>
                 Song #: {currentSong+1} <br/>
                 Title: {playlist[currentSong].title} <br/>

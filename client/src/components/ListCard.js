@@ -26,7 +26,7 @@ function ListCard(props) {
     const { auth } = useContext(AuthContext);
     const [editActive, setEditActive] = useState(false);
     const [text, setText] = useState("");
-    const { pair, selected } = props;
+    const { pair } = props;
 
     function handleLoadList(event, id) {
         console.log("handleLoadList for " + id);
@@ -60,8 +60,6 @@ function ListCard(props) {
 
     async function handleDeleteList(event, id) {
         event.stopPropagation();
-        let _id = event.target.id;
-        _id = ("" + _id).substring("delete-list-".length);
         store.markListForDeletion(id);
     }
 
@@ -272,14 +270,7 @@ function ListCard(props) {
         }
     }
 
-    let selectClass = "unselected-list-card";
-    if (selected) {
-        selectClass = "selected-list-card";
-    }
-    let cardStatus = false;
-    if (store.isListNameEditActive) {
-        cardStatus = true;
-    }
+
     let cardElement =
         <ListItem
             id={pair._id}

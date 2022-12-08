@@ -12,7 +12,6 @@ import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
 import PersonIcon from '@mui/icons-material/Person';
 import GroupIcon from '@mui/icons-material/Group';
 import HomeIcon from '@mui/icons-material/Home';
@@ -217,7 +216,7 @@ export default function AppBanner() {
                     >
                         <GroupIcon/>
                     </Link>  
-                    <img src="/playlister.png" alt="image" width="100" height="auto"/>
+                    <img src="/playlister.png" alt="Playlister Logo" width="100" height="auto"/>
                     <TextField 
                         id="standard-basic" 
                         InputProps={{
@@ -242,7 +241,7 @@ export default function AppBanner() {
         else
             return (
                 <div>
-                    <a href="/"><img src="/playlister.png" alt="image" width="100" height="auto"/></a>
+                    <a href="/"><img src="/playlister.png" alt="Playlister Logo" width="100" height="auto"/></a>
                 </div>
             );
     }
